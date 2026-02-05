@@ -1,0 +1,357 @@
+---
+import Base from '../layouts/Base.astro';
+
+const projects = [
+  {
+    name: 'RollDeep',
+    icon: '🏡',
+    tagline: 'Vacation rental marketplace with AI-powered local experience discovery.',
+    href: '/projects/rolldeep',
+    liveUrl: 'https://rolldeep-traveler.marl0.space',
+    status: 'Live — 1+ year, real revenue',
+    tags: ['Next.js', 'PostgreSQL', 'Local LLMs', 'Prisma'],
+  },
+  {
+    name: 'Story Stuff',
+    icon: '📖',
+    tagline: 'Non-linear storytelling — capture oral stories, structure them with AI, navigate and remix.',
+    href: '/projects/stostu',
+    liveUrl: 'https://stostu.marl0.space',
+    status: 'Early development',
+    tags: ['Next.js', 'Whisper', 'Ollama', 'PostgreSQL'],
+  },
+  {
+    name: 'Energy Tracker',
+    icon: '⚡',
+    tagline: 'Renewable energy intelligence — daily briefings on policy, markets, and technology.',
+    href: '/projects/energy-tracker',
+    status: 'Active — daily automated briefings',
+    tags: ['Playwright', 'SQLite', 'Ollama', 'Cron'],
+  },
+];
+
+const latestPosts = [
+  {
+    title: 'Making Local LLMs Production-Ready for Classification',
+    href: '/blog/local-llm-classification',
+    date: '2026-02-04',
+    excerpt: 'From 61% false positives to 93%+ accuracy using off-the-shelf models and zero cloud API spend.',
+  },
+  {
+    title: 'Anatomy of an Intelligence Pipeline',
+    href: '/blog/intelligence-pipeline',
+    date: '2026-02-04',
+    excerpt: 'How we built a self-healing data pipeline that discovers, qualifies, and annotates thousands of local experiences.',
+  },
+];
+---
+
+<Base>
+  <section class="hero">
+    <h1>marl0<span class="accent">.space</span></h1>
+    <p class="hero-sub">A living showcase of things being built.</p>
+    <p class="hero-desc">
+      This is a workshop with the doors open. Software products, AI experiments,
+      renewable energy intelligence — all running on a Mac Mini in a basement,
+      tunneled to the world through Cloudflare. Everything here is real, in progress,
+      and probably a little rough around the edges.
+    </p>
+    <div class="hero-cta">
+      <a href="/lab" class="btn btn-outline">See what's running →</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-grid">
+      {projects.map((p) => (
+        <a href={p.href} class="project-card">
+          <div class="project-header">
+            <span class="project-icon">{p.icon}</span>
+            <h3>{p.name}</h3>
+          </div>
+          <p class="project-tagline">{p.tagline}</p>
+          <div class="project-meta">
+            <span class="project-status">{p.status}</span>
+          </div>
+          <div class="project-tags">
+            {p.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+          {p.liveUrl && (
+            <span class="project-live">
+              <span class="live-dot"></span> Live
+            </span>
+          )}
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Latest Writing</h2>
+    <div class="posts-list">
+      {latestPosts.map((post) => (
+        <a href={post.href} class="post-row">
+          <div class="post-info">
+            <h3>{post.title}</h3>
+            <p>{post.excerpt}</p>
+          </div>
+          <time class="post-date">{post.date}</time>
+        </a>
+      ))}
+    </div>
+    <a href="/blog" class="section-link">All posts →</a>
+  </section>
+
+  <section class="section about">
+    <h2 class="section-title">What's happening here?</h2>
+    <div class="about-text">
+      <p>
+        One person building software products, powered by an AI assistant, dual RTX 5090s
+        running local LLMs, and a refusal to accept that you need a team of 20 to ship real things.
+      </p>
+      <p>
+        The <a href="/lab">Lab</a> shows every service running in real-time.
+        The <a href="/blog">Blog</a> documents the technical decisions.
+        The <a href="/projects">Projects</a> are the work itself.
+      </p>
+      <p>
+        Nothing here is polished for show. It's polished for use.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding: 4rem 0 3rem;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+
+  .accent { color: var(--accent); }
+
+  .hero-sub {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+  }
+
+  .hero-desc {
+    max-width: 560px;
+    margin: 1.5rem auto 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .hero-cta {
+    margin-top: 2rem;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .btn-outline {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    text-decoration: none;
+  }
+
+  .section {
+    padding: 2.5rem 0;
+  }
+
+  .section-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .project-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+
+  .project-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-icon { font-size: 1.3rem; }
+
+  .project-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .project-tagline {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .project-meta {
+    margin-bottom: 0.75rem;
+  }
+
+  .project-status {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    color: var(--text-dim);
+  }
+
+  .project-live {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.7rem;
+    color: var(--green);
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .post-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s;
+  }
+
+  .post-row:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
+  .post-info h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .post-info p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .post-date {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+    font-family: var(--font-mono);
+  }
+
+  .section-link {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  .about {
+    padding-bottom: 3rem;
+  }
+
+  .about-text {
+    max-width: 600px;
+  }
+
+  .about-text p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .about-text a {
+    color: var(--accent);
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 2.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .post-row { flex-direction: column; gap: 0.5rem; }
+    .post-date { align-self: flex-start; }
+  }
+</style>

@@ -1,0 +1,109 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<Base title="Blog" description="Technical writing about building software, AI, and infrastructure.">
+  <section class="blog-hero">
+    <h1>✍️ Blog</h1>
+    <p>Technical decisions, build logs, and lessons learned. Written as the work happens.</p>
+  </section>
+
+  <div class="posts">
+    {posts.map((post) => (
+      <a href={`/blog/${post.id}`} class="post-card">
+        <div class="post-meta">
+          <time>{post.data.date}</time>
+          {post.data.tags && (
+            <div class="post-tags">
+              {post.data.tags.map((t) => <span class="tag">{t}</span>)}
+            </div>
+          )}
+        </div>
+        <h2>{post.data.title}</h2>
+        <p class="post-excerpt">{post.data.excerpt}</p>
+      </a>
+    ))}
+  </div>
+</Base>
+
+<style>
+  .blog-hero {
+    padding: 3rem 0 2rem;
+  }
+
+  .blog-hero h1 {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .blog-hero p {
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  .posts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .post-card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+
+  .post-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-meta time {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+  }
+
+  .post-tags {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .tag {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+    background: var(--bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    color: var(--text-dim);
+  }
+
+  .post-card h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .post-excerpt {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+</style>

@@ -1,0 +1,198 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+const { id } = Astro.params;
+const projects = await getCollection('projects');
+const project = projects.find((p) => p.id === id);
+
+if (!project) {
+  return Astro.redirect('/projects');
+}
+
+const { Content } = await render(project);
+---
+
+<Base title={project.data.title} description={project.data.tagline}>
+  <article class="project-page">
+    <header class="project-header">
+      <div class="project-title-row">
+        <span class="project-icon">{project.data.icon}</span>
+        <h1>{project.data.title}</h1>
+        {project.data.liveUrl && (
+          <a href={project.data.liveUrl} target="_blank" class="live-link">
+            <span class="live-dot"></span> View Live
+          </a>
+        )}
+      </div>
+      <p class="project-tagline">{project.data.tagline}</p>
+      <div class="project-meta">
+        <span class="project-status">{project.data.status}</span>
+        {project.data.tags && (
+          <div class="project-tags">
+            {project.data.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="project-body">
+      <Content />
+    </div>
+
+    <footer class="project-footer">
+      <a href="/projects">← Back to all projects</a>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .project-page {
+    padding: 3rem 0;
+  }
+
+  .project-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .project-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .project-icon { font-size: 2rem; }
+
+  .project-title-row h1 {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .live-link {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--green);
+    text-decoration: none;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .live-link:hover {
+    background: rgba(52, 211, 153, 0.1);
+    text-decoration: none;
+  }
+
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--green);
+  }
+
+  .project-tagline {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    font-style: italic;
+  }
+
+  .project-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .project-status {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .project-tags {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    background: var(--bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    color: var(--text-dim);
+  }
+
+  .project-body {
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  .project-body :global(h2) {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .project-body :global(h3) {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-body :global(p) {
+    margin-bottom: 1.25rem;
+    color: var(--text);
+  }
+
+  .project-body :global(ul), .project-body :global(ol) {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+  }
+
+  .project-body :global(li) {
+    margin-bottom: 0.35rem;
+  }
+
+  .project-body :global(strong) {
+    font-weight: 600;
+  }
+
+  .project-body :global(a) {
+    color: var(--accent);
+  }
+
+  .project-body :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+
+  .project-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .project-footer a {
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .project-title-row h1 { font-size: 1.6rem; }
+    .live-link { margin-left: 0; }
+  }
+</style>

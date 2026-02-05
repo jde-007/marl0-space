@@ -1,0 +1,120 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = 'marl0.space', description = 'A living showcase of things being built.' } = Astro.props;
+const fullTitle = title === 'marl0.space' ? title : `${title} — marl0.space`;
+---
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{fullTitle}</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">marl0<span>.space</span></a>
+      <div class="nav-links">
+        <a href="/projects">Projects</a>
+        <a href="/blog">Blog</a>
+        <a href="/lab">Lab</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>Built on a Mac Mini, tunneled through Cloudflare, powered by questionable ambition.</p>
+      <p class="footer-sub">An experiment in building in public.</p>
+    </div>
+  </footer>
+</body>
+</html>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10, 10, 11, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .nav-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-logo span {
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .nav-links a {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--text);
+  }
+
+  main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .footer {
+    margin-top: 4rem;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid var(--border-subtle);
+    text-align: center;
+  }
+
+  .footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .footer p {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+
+  .footer-sub {
+    margin-top: 0.25rem;
+    font-style: italic;
+  }
+</style>

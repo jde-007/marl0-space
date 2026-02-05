@@ -1,0 +1,248 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="Lab" description="Live status of all services running on marl0.space">
+  <section class="lab-hero">
+    <h1>🔬 Lab</h1>
+    <p>Everything running right now. Health checks are live — what you see is what's up.</p>
+  </section>
+
+  <div id="status-board" class="loading">
+    <div class="loading-msg">Checking services...</div>
+  </div>
+
+  <section class="infra">
+    <h2 class="section-title">The Stack</h2>
+    <div class="stack-grid">
+      <div class="stack-card">
+        <div class="stack-icon">🖥️</div>
+        <h3>Mac Mini M4</h3>
+        <p>Application server running all services via Node.js and Next.js dev servers.</p>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">🎮</div>
+        <h3>Dual RTX 5090s</h3>
+        <p>Separate GPU server running Ollama for local LLM inference. Classification, embeddings, vision, OCR.</p>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">🌐</div>
+        <h3>Cloudflare Tunnel</h3>
+        <p>Zero-trust access to every service. No open ports, no exposed IPs, automatic TLS.</p>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon">🤖</div>
+        <h3>OpenClaw + Claude</h3>
+        <p>AI assistant managing the infrastructure, writing code, monitoring services, and writing these words.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  async function loadStatus() {
+    const board = document.getElementById('status-board');
+    if (!board) return;
+
+    try {
+      const res = await fetch('/api/status');
+      const data = await res.json();
+      board.innerHTML = renderBoard(data.services);
+      board.classList.remove('loading');
+    } catch (err) {
+      board.innerHTML = `<div class="error">Couldn't reach the status API. The index server might be restarting.</div>`;
+      board.classList.remove('loading');
+    }
+  }
+
+  function renderBoard(services: any[]) {
+    return services.map(svc => {
+      const totalUp = svc.apps.filter((a: any) => a.up).length;
+      const total = svc.apps.length;
+      const allUp = totalUp === total;
+      const someUp = totalUp > 0;
+      const statusEmoji = allUp ? '🟢' : someUp ? '🟡' : '🔴';
+      const statusText = allUp ? 'All systems go' : someUp ? `${totalUp}/${total} running` : 'Offline';
+
+      const apps = svc.apps.map((app: any) => {
+        const dot = app.up ? 'up' : 'down';
+        const lock = app.public ? '' : ' <span class="lock">🔒</span>';
+        const url = `https://${app.subdomain}.marl0.space`;
+        return `
+          <div class="app-row">
+            <span class="dot ${dot}"></span>
+            <a href="${url}" target="_blank">${app.name}</a>${lock}
+            <span class="app-desc">${app.description}</span>
+          </div>`;
+      }).join('');
+
+      return `
+        <div class="svc-card">
+          <div class="svc-header">
+            <span class="svc-icon">${svc.icon}</span>
+            <h3>${svc.name}</h3>
+            <span class="svc-status">${statusEmoji} ${statusText}</span>
+          </div>
+          <p class="svc-desc">${svc.description}</p>
+          <div class="svc-apps">${apps}</div>
+        </div>`;
+    }).join('');
+  }
+
+  loadStatus();
+  setInterval(loadStatus, 30000);
+</script>
+
+<style>
+  .lab-hero {
+    padding: 3rem 0 2rem;
+  }
+
+  .lab-hero h1 {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .lab-hero p {
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+
+  #status-board {
+    min-height: 200px;
+  }
+
+  .loading-msg, .error {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .svc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .svc-card:hover { border-color: var(--accent); }
+
+  .svc-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.25rem 1.5rem 0;
+    flex-wrap: wrap;
+  }
+
+  .svc-icon { font-size: 1.3rem; }
+
+  .svc-header h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+
+  .svc-status {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .svc-desc {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding: 0.25rem 1.5rem 0;
+  }
+
+  .svc-apps {
+    padding: 0.75rem 1.5rem 1.25rem;
+  }
+
+  .app-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 0;
+    font-size: 0.9rem;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot.up {
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+  }
+
+  .dot.down {
+    background: var(--red);
+    opacity: 0.6;
+  }
+
+  .app-row a {
+    color: var(--accent);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .lock { font-size: 0.7rem; opacity: 0.5; }
+
+  .app-desc {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-left: auto;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .section-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin: 2.5rem 0 1.25rem;
+  }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .stack-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+
+  .stack-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+
+  .stack-card h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .stack-card p {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+
+  .infra { padding-bottom: 2rem; }
+
+  @media (max-width: 600px) {
+    .app-desc { display: none; }
+    .svc-status { margin-left: 0; }
+    .stack-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
