@@ -4,6 +4,7 @@ icon: "📖"
 tagline: "Non-linear storytelling — capture oral stories, structure them with AI, navigate and remix."
 status: "Early development"
 liveUrl: "https://stostu.marl0.space"
+devOnly: true
 tags: ["Next.js", "Whisper", "Ollama", "PostgreSQL", "Expo"]
 order: 2
 ---

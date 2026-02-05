@@ -7,7 +7,8 @@ const projects = [
     icon: '🏡',
     tagline: 'Vacation rental marketplace with AI-powered local experience discovery.',
     href: '/projects/rolldeep',
-    liveUrl: 'https://rolldeep-traveler.marl0.space',
+    prodUrl: 'https://rolldeep.com',
+    devUrl: 'https://rolldeep-traveler.marl0.space',
     status: 'Live — 1+ year, real revenue',
     tags: ['Next.js', 'PostgreSQL', 'Local LLMs', 'Prisma'],
   },
@@ -16,7 +17,7 @@ const projects = [
     icon: '📖',
     tagline: 'Non-linear storytelling — capture oral stories, structure them with AI, navigate and remix.',
     href: '/projects/stostu',
-    liveUrl: 'https://stostu.marl0.space',
+    devUrl: 'https://stostu.marl0.space',
     status: 'Early development',
     tags: ['Next.js', 'Whisper', 'Ollama', 'PostgreSQL'],
   },
@@ -77,9 +78,14 @@ const latestPosts = [
           <div class="project-tags">
             {p.tags.map((t) => <span class="tag">{t}</span>)}
           </div>
-          {p.liveUrl && (
+          {p.prodUrl && (
             <span class="project-live">
               <span class="live-dot"></span> Live
+            </span>
+          )}
+          {!p.prodUrl && p.devUrl && (
+            <span class="project-dev">
+              dev
             </span>
           )}
         </a>
@@ -273,6 +279,20 @@ const latestPosts = [
     border-radius: 50%;
     box-shadow: 0 0 6px var(--green);
     animation: pulse 2s ease-in-out infinite;
+  }
+
+  .project-dev {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    color: var(--yellow);
+    padding: 0.1rem 0.45rem;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
   @keyframes pulse {

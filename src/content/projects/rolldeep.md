@@ -3,7 +3,7 @@ title: "RollDeep"
 icon: "🏡"
 tagline: "Vacation rental marketplace with AI-powered local experience discovery."
 status: "Live — 1+ year, real revenue"
-liveUrl: "https://rolldeep-traveler.marl0.space"
+liveUrl: "https://rolldeep.com"
 tags: ["Next.js", "PostgreSQL", "Prisma", "Local LLMs", "Ollama", "Cloudflare"]
 order: 1
 ---
@@ -35,13 +35,18 @@ The entire annotation pipeline runs on **local LLMs with zero cloud API spend** 
 - **Infrastructure**: Mac Mini + Cloudflare Tunnel + Vercel (production)
 - **Worker**: Fastify job queue processor with BullMQ-style patterns
 
-## Live Apps
+## Links
 
+**Production:** [rolldeep.com](https://rolldeep.com)
+
+**Dev environments** (running on marl0.space infrastructure):
 - [Traveler](https://rolldeep-traveler.marl0.space) — Guest-facing booking & discovery
 - [Marketing](https://rolldeep-marketing.marl0.space) — Marketing site
 - [Dashboard](https://rolldeep-dashboard.marl0.space) — Host dashboard
 - [Intelligence](https://rolldeep-intelligence.marl0.space) — Intelligence UI
 - [Public API](https://rolldeep-public-api.marl0.space) — Public-facing API
+
+*Dev links point to live development servers — expect rough edges and frequent changes.*
 
 ## Markets
 

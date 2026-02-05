@@ -19,9 +19,14 @@ const { Content } = await render(project);
       <div class="project-title-row">
         <span class="project-icon">{project.data.icon}</span>
         <h1>{project.data.title}</h1>
-        {project.data.liveUrl && (
+        {project.data.liveUrl && !project.data.devOnly && (
           <a href={project.data.liveUrl} target="_blank" class="live-link">
             <span class="live-dot"></span> View Live
+          </a>
+        )}
+        {project.data.liveUrl && project.data.devOnly && (
+          <a href={project.data.liveUrl} target="_blank" class="dev-link">
+            View Dev ↗
           </a>
         )}
       </div>
@@ -88,6 +93,22 @@ const { Content } = await render(project);
 
   .live-link:hover {
     background: rgba(52, 211, 153, 0.1);
+    text-decoration: none;
+  }
+
+  .dev-link {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: var(--yellow);
+    text-decoration: none;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .dev-link:hover {
+    background: rgba(251, 191, 36, 0.1);
     text-decoration: none;
   }
 
