@@ -32,13 +32,7 @@ const categoryDescriptions: Record<string, string> = {
 <Base title="Capabilities" description="What one person with the right tools can actually do.">
   <section class="hero">
     <h1>Capabilities</h1>
-    <p class="hero-sub">Not a resume. A map of what's possible.</p>
-    <p class="hero-desc">
-      This is a living document of capabilities — not just technical skills, but the
-      compounding effect of 15 years of building software, founding products, and
-      learning to collaborate with AI. It's not about what one person can do alone.
-      It's about what one person can do with the right tools, taste, and stubbornness.
-    </p>
+    <p class="hero-sub">I can do anything so long as I have something more important to do.</p>
   </section>
 
   <!-- Capabilities -->
@@ -63,6 +57,7 @@ const categoryDescriptions: Record<string, string> = {
   <!-- Experience Timeline -->
   <section class="section">
     <h2 class="section-title">Where I've Done It</h2>
+    <p class="not-looking">I'm not currently looking for work, but please <a href="/inquire">let me know</a> if any work is looking for me.</p>
     <div class="timeline">
       {experiences.map((exp) => (
         <div class="timeline-item">
@@ -226,6 +221,17 @@ const categoryDescriptions: Record<string, string> = {
 
   .cap-body :global(li) {
     margin-bottom: 0.25rem;
+  }
+
+  .not-looking {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+  }
+
+  .not-looking a {
+    color: var(--accent);
   }
 
   /* Timeline */
