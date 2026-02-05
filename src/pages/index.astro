@@ -66,6 +66,9 @@ const latestPosts = [
 ---
 
 <Base>
+  <!-- Ocean background -->
+  <canvas id="ocean-canvas"></canvas>
+
   <section class="hero">
     <h1>marl0<span class="accent">.space</span></h1>
     <p class="hero-sub">A living showcase of things being built.</p>
@@ -127,6 +130,8 @@ const latestPosts = [
     <a href="/blog" class="section-link">All posts →</a>
   </section>
 
+  <script is:inline src="/ocean.js"></script>
+
   <section class="section about">
     <h2 class="section-title">What's happening here?</h2>
     <div class="about-text">
@@ -147,9 +152,20 @@ const latestPosts = [
 </Base>
 
 <style>
+  #ocean-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
+
   .hero {
     padding: 4rem 0 3rem;
     text-align: center;
+    position: relative;
   }
 
   .hero h1 {
@@ -165,6 +181,7 @@ const latestPosts = [
     color: var(--text-muted);
     font-size: 1.2rem;
     margin-top: 0.5rem;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
   }
 
   .hero-desc {
@@ -173,6 +190,7 @@ const latestPosts = [
     color: var(--text-muted);
     font-size: 0.95rem;
     line-height: 1.7;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
   }
 
   .hero-cta {
@@ -201,6 +219,7 @@ const latestPosts = [
 
   .section {
     padding: 2.5rem 0;
+    position: relative;
   }
 
   .section-title {
