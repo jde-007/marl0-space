@@ -1,0 +1,415 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const capabilities = (await getCollection('capabilities')).sort(
+  (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99)
+);
+const experiences = (await getCollection('experiences')).sort(
+  (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99)
+);
+const learnings = (await getCollection('learnings')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const categoryLabels: Record<string, string> = {
+  build: 'Build',
+  lead: 'Lead',
+  operate: 'Operate',
+  think: 'Think',
+  amplify: 'Amplify',
+};
+
+const categoryDescriptions: Record<string, string> = {
+  build: 'Ship real products from zero to production',
+  lead: 'Build teams and guide organizations',
+  operate: 'Own infrastructure and keep things running',
+  think: 'See what to build and why it matters',
+  amplify: 'Multiply output through AI and tooling',
+};
+---
+
+<Base title="Capabilities" description="What one person with the right tools can actually do.">
+  <section class="hero">
+    <h1>Capabilities</h1>
+    <p class="hero-sub">Not a resume. A map of what's possible.</p>
+    <p class="hero-desc">
+      This is a living document of capabilities — not just technical skills, but the
+      compounding effect of 15 years of building software, founding products, and
+      learning to collaborate with AI. It's not about what one person can do alone.
+      It's about what one person can do with the right tools, taste, and stubbornness.
+    </p>
+  </section>
+
+  <!-- Capabilities -->
+  <section class="section">
+    <h2 class="section-title">What I Can Do</h2>
+    <div class="caps-grid">
+      {capabilities.map((cap) => (
+        <div class="cap-card">
+          <div class="cap-header">
+            <span class="cap-icon">{cap.data.icon}</span>
+            <div>
+              <h3>{cap.data.title}</h3>
+              <span class="cap-category">{categoryLabels[cap.data.category]}</span>
+            </div>
+          </div>
+          <div class="cap-body" set:html={cap.body} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Experience Timeline -->
+  <section class="section">
+    <h2 class="section-title">Where I've Done It</h2>
+    <div class="timeline">
+      {experiences.map((exp) => (
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <div class="timeline-header">
+              <div>
+                <h3>{exp.data.role}</h3>
+                <span class="timeline-org">{exp.data.org}</span>
+              </div>
+              <time class="timeline-period">{exp.data.period}</time>
+            </div>
+            <div class="timeline-body" set:html={exp.body} />
+            {exp.data.tags && (
+              <div class="timeline-tags">
+                {exp.data.tags.map((t) => <span class="tag">{t}</span>)}
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Learnings -->
+  <section class="section">
+    <h2 class="section-title">What I've Learned</h2>
+    <p class="section-intro">
+      Distilled insights from building things. This section grows over time — 
+      new learnings get added as they're discovered and articulated.
+    </p>
+    <div class="learnings-list">
+      {learnings.map((learning) => (
+        <div class="learning-card">
+          <h3>"{learning.data.title}"</h3>
+          <div class="learning-meta">
+            <time>{learning.data.date}</time>
+            <span class="learning-source">from: {learning.data.source}</span>
+          </div>
+          <div class="learning-body" set:html={learning.body} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section cta">
+    <p>
+      This page is a living system. Over the coming weeks and months, capabilities will be refined,
+      experiences will be deepened through interviews, and learnings will accumulate.
+      Check back — it only gets richer.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding: 3rem 0 2rem;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-sub {
+    color: var(--accent);
+    font-size: 1.1rem;
+    margin-top: 0.25rem;
+    font-style: italic;
+  }
+
+  .hero-desc {
+    max-width: 620px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    line-height: 1.7;
+  }
+
+  .section {
+    padding: 2rem 0;
+  }
+
+  .section-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .section-intro {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+    max-width: 560px;
+  }
+
+  /* Capabilities Grid */
+  .caps-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cap-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .cap-card:hover {
+    border-color: var(--accent);
+  }
+
+  .cap-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cap-icon {
+    font-size: 1.5rem;
+  }
+
+  .cap-header h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .cap-category {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .cap-body {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .cap-body :global(p) {
+    margin-bottom: 0.75rem;
+  }
+
+  .cap-body :global(strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .cap-body :global(ul) {
+    padding-left: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cap-body :global(li) {
+    margin-bottom: 0.25rem;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--accent);
+  }
+
+  .timeline-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+
+  .timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .timeline-header h3 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .timeline-org {
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  .timeline-period {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+
+  .timeline-body {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .timeline-body :global(p) {
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-body :global(strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .timeline-body :global(ul) {
+    padding-left: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-body :global(li) {
+    margin-bottom: 0.2rem;
+  }
+
+  .timeline-body :global(a) {
+    color: var(--accent);
+  }
+
+  .timeline-body :global(em) {
+    font-style: italic;
+    color: var(--text-dim);
+  }
+
+  .timeline-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.75rem;
+  }
+
+  .tag {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+    background: var(--bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    color: var(--text-dim);
+  }
+
+  /* Learnings */
+  .learnings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .learning-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    border-left: 3px solid var(--accent);
+  }
+
+  .learning-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 0.35rem;
+    color: var(--text);
+  }
+
+  .learning-meta {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .learning-meta time {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+  }
+
+  .learning-source {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .learning-body {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  .learning-body :global(p) {
+    margin-bottom: 0.5rem;
+  }
+
+  /* CTA */
+  .cta {
+    padding: 2rem 0 3rem;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 1rem;
+  }
+
+  .cta p {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    font-style: italic;
+    max-width: 560px;
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 2rem; }
+    .timeline-header { flex-direction: column; gap: 0.25rem; }
+    .timeline-period { align-self: flex-start; }
+  }
+</style>
