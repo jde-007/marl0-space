@@ -3,10 +3,25 @@
 // Characters are the water. The directory is the ocean.
 
 (function () {
-  const canvas = document.getElementById('ocean-canvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
+  function start() {
+    // Create canvas and inject at the start of body, behind everything
+    const canvas = document.createElement('canvas');
+    canvas.id = 'ocean-canvas';
+    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;';
+    document.body.prepend(canvas);
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    run(canvas, ctx);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+
+  function run(canvas, ctx) {
 
   // The directory — words from the site's content
   const DIRECTORY = [
@@ -164,14 +179,14 @@
         // Base brightness
         const brightness = (0.06 + diff * 0.12 + fresnel * 0.08 + spec * fresnel) * distFade;
 
-        // Color: deep blue-purple base, slightly brighter at wave peaks
-        const peakBoost = Math.max(wave.elevation, 0) * 0.08;
-        const rr = Math.round((8 + peakBoost * 20 + spec * fresnel * 60) * distFade);
-        const gg = Math.round((8 + peakBoost * 15 + spec * fresnel * 70) * distFade);
-        const bb = Math.round((20 + peakBoost * 30 + fresnel * 30 + spec * fresnel * 90) * distFade);
+        // Color: deep blue-purple, brighter on wave peaks and specular
+        const peakBoost = Math.max(wave.elevation, 0) * 0.3;
+        const rr = Math.round((20 + peakBoost * 40 + spec * fresnel * 120 + fresnel * 25) * distFade);
+        const gg = Math.round((20 + peakBoost * 30 + spec * fresnel * 140 + fresnel * 30) * distFade);
+        const bb = Math.round((50 + peakBoost * 60 + fresnel * 60 + spec * fresnel * 180) * distFade);
 
-        // Opacity: wave elevation + lighting determine visibility
-        const alpha = Math.max(0.02, Math.min(0.65, brightness + peakBoost * 0.3));
+        // Opacity: base visibility + wave and lighting boost
+        const alpha = Math.max(0.08, Math.min(0.85, 0.12 + brightness * 1.5 + peakBoost * 0.5));
 
         ctx.fillStyle = `rgba(${rr}, ${gg}, ${bb}, ${alpha})`;
 
@@ -184,4 +199,5 @@
   }
 
   animate();
+  } // end run()
 })();

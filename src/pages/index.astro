@@ -66,9 +66,6 @@ const latestPosts = [
 ---
 
 <Base>
-  <!-- Ocean background -->
-  <canvas id="ocean-canvas"></canvas>
-
   <section class="hero">
     <h1>marl0<span class="accent">.space</span></h1>
     <p class="hero-sub">A living showcase of things being built.</p>
@@ -130,7 +127,14 @@ const latestPosts = [
     <a href="/blog" class="section-link">All posts →</a>
   </section>
 
-  <script is:inline src="/ocean.js"></script>
+  <script is:inline>
+    // Load ocean.js dynamically to avoid caching/loading issues
+    (function() {
+      var s = document.createElement('script');
+      s.src = '/ocean.js?v=' + Date.now();
+      document.body.appendChild(s);
+    })();
+  </script>
 
   <section class="section about">
     <h2 class="section-title">What's happening here?</h2>
@@ -152,25 +156,15 @@ const latestPosts = [
 </Base>
 
 <style is:global>
-  /* Ocean home page overrides */
+  /* Ocean home page: body bg transparent so canvas shows through */
   body {
     background: transparent !important;
   }
 
-  #ocean-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  /* Ensure all content floats above the ocean */
-  .nav, main, .footer {
+  /* All page content above the ocean canvas */
+  nav.nav, main, footer.footer {
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
 </style>
 
