@@ -151,7 +151,7 @@ const latestPosts = [
   </section>
 </Base>
 
-<style>
+<style is:global>
   #ocean-canvas {
     position: fixed;
     top: 0;
@@ -161,7 +161,9 @@ const latestPosts = [
     z-index: -1;
     pointer-events: none;
   }
+</style>
 
+<style>
   .hero {
     padding: 4rem 0 3rem;
     text-align: center;
