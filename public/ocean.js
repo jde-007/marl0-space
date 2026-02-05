@@ -104,7 +104,9 @@
     requestAnimationFrame(animate);
     time += 0.008;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Dark background
+    ctx.fillStyle = '#0a0a0b';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const fontSize = Math.round(11 * dpr);
     ctx.font = `${fontSize}px "SF Mono", "Fira Code", "Fira Mono", "Consolas", monospace`;

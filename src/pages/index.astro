@@ -152,14 +152,25 @@ const latestPosts = [
 </Base>
 
 <style is:global>
+  /* Ocean home page overrides */
+  body {
+    background: transparent !important;
+  }
+
   #ocean-canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
+    z-index: 0;
     pointer-events: none;
+  }
+
+  /* Ensure all content floats above the ocean */
+  .nav, main, .footer {
+    position: relative;
+    z-index: 1;
   }
 </style>
 
