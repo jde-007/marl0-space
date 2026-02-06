@@ -20,34 +20,45 @@ const categoryLabels: Record<string, string> = {
   amplify: 'Amplify',
 };
 
-const categoryDescriptions: Record<string, string> = {
-  build: 'Ship real products from zero to production',
-  lead: 'Build teams and guide organizations',
-  operate: 'Own infrastructure and keep things running',
-  think: 'See what to build and why it matters',
-  amplify: 'Multiply output through AI and tooling',
+const categoryColors: Record<string, string> = {
+  build:   '#818cf8',
+  lead:    '#34d399',
+  operate: '#fbbf24',
+  think:   '#f472b6',
+  amplify: '#38bdf8',
 };
 ---
 
 <Base title="Capabilities" description="What one person with the right tools can actually do.">
   <section class="hero">
     <h1>Capabilities</h1>
-    <p class="hero-sub">I can do anything so long as I have something more important to do.</p>
+    <p class="hero-sub">What one person with the right tools can actually do.</p>
   </section>
 
   <!-- Capabilities -->
   <section class="section">
     <h2 class="section-title">What I Can Do</h2>
-    <div class="caps-grid">
+    <div class="caps-stack">
       {capabilities.map((cap) => (
-        <div class="cap-card">
+        <div class="cap-card" style={`--cat-color: ${categoryColors[cap.data.category]}`}>
           <div class="cap-header">
             <span class="cap-icon">{cap.data.icon}</span>
-            <div>
+            <div class="cap-header-text">
               <h3>{cap.data.title}</h3>
-              <span class="cap-category">{categoryLabels[cap.data.category]}</span>
+              <span class="cap-category" style={`color: ${categoryColors[cap.data.category]}`}>
+                {categoryLabels[cap.data.category]}
+              </span>
             </div>
+            {cap.data.stat && (
+              <div class="cap-stat">
+                <span class="stat-value" style={`color: ${categoryColors[cap.data.category]}`}>{cap.data.stat}</span>
+                <span class="stat-label">{cap.data.statLabel}</span>
+              </div>
+            )}
           </div>
+          {cap.data.tagline && (
+            <p class="cap-tagline">{cap.data.tagline}</p>
+          )}
           <div class="cap-body" set:html={cap.body} />
         </div>
       ))}
@@ -57,7 +68,7 @@ const categoryDescriptions: Record<string, string> = {
   <!-- Experience Timeline -->
   <section class="section">
     <h2 class="section-title">Where I've Done It</h2>
-    <p class="not-looking">I'm not currently looking for work, but please <a href="/inquire">let me know</a> if any work is looking for me.</p>
+    <p class="not-looking">Not currently looking — but if something's looking for me, <a href="mailto:davidjerwin@gmail.com">let's talk</a>.</p>
     <div class="timeline">
       {experiences.map((exp) => (
         <div class="timeline-item">
@@ -73,7 +84,7 @@ const categoryDescriptions: Record<string, string> = {
             <div class="timeline-body" set:html={exp.body} />
             {exp.data.tags && (
               <div class="timeline-tags">
-                {exp.data.tags.map((t) => <span class="tag">{t}</span>)}
+                {exp.data.tags.map((t: string) => <span class="tag">{t}</span>)}
               </div>
             )}
           </div>
@@ -86,8 +97,7 @@ const categoryDescriptions: Record<string, string> = {
   <section class="section">
     <h2 class="section-title">What I've Learned</h2>
     <p class="section-intro">
-      Distilled insights from building things. This section grows over time — 
-      new learnings get added as they're discovered and articulated.
+      Distilled from building things. This section grows over time.
     </p>
     <div class="learnings-list">
       {learnings.map((learning) => (
@@ -95,7 +105,8 @@ const categoryDescriptions: Record<string, string> = {
           <h3>"{learning.data.title}"</h3>
           <div class="learning-meta">
             <time>{learning.data.date}</time>
-            <span class="learning-source">from: {learning.data.source}</span>
+            <span class="learning-divider">·</span>
+            <span class="learning-source">{learning.data.source}</span>
           </div>
           <div class="learning-body" set:html={learning.body} />
         </div>
@@ -105,9 +116,8 @@ const categoryDescriptions: Record<string, string> = {
 
   <section class="section cta">
     <p>
-      This page is a living system. Over the coming weeks and months, capabilities will be refined,
-      experiences will be deepened through interviews, and learnings will accumulate.
-      Check back — it only gets richer.
+      This page is alive. Capabilities get refined, experiences get deepened through interviews,
+      and learnings accumulate. Check back — it only gets richer.
     </p>
   </section>
 </Base>
@@ -124,18 +134,9 @@ const categoryDescriptions: Record<string, string> = {
   }
 
   .hero-sub {
-    color: var(--accent);
-    font-size: 1.1rem;
-    margin-top: 0.25rem;
-    font-style: italic;
-  }
-
-  .hero-desc {
-    max-width: 620px;
     color: var(--text-muted);
-    font-size: 0.95rem;
-    margin-top: 1rem;
-    line-height: 1.7;
+    font-size: 1rem;
+    margin-top: 0.25rem;
   }
 
   .section {
@@ -157,8 +158,8 @@ const categoryDescriptions: Record<string, string> = {
     max-width: 560px;
   }
 
-  /* Capabilities Grid */
-  .caps-grid {
+  /* === Capabilities Stack === */
+  .caps-stack {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -173,21 +174,25 @@ const categoryDescriptions: Record<string, string> = {
   }
 
   .cap-card:hover {
-    border-color: var(--accent);
+    border-color: var(--cat-color);
   }
 
   .cap-header {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .cap-icon {
     font-size: 1.5rem;
   }
 
-  .cap-header h3 {
+  .cap-header-text {
+    flex: 1;
+  }
+
+  .cap-header-text h3 {
     font-size: 1.05rem;
     font-weight: 600;
   }
@@ -196,17 +201,66 @@ const categoryDescriptions: Record<string, string> = {
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .cap-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  .stat-value {
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    text-align: right;
+    max-width: 120px;
+    line-height: 1.3;
+    margin-top: 0.15rem;
+  }
+
+  .cap-tagline {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
   }
 
   .cap-body {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     line-height: 1.7;
     color: var(--text-muted);
   }
 
-  .cap-body :global(p) {
-    margin-bottom: 0.75rem;
+  .cap-body :global(ul) {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .cap-body :global(li) {
+    position: relative;
+    padding-left: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .cap-body :global(li)::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--cat-color);
+    font-weight: 700;
+    font-size: 1rem;
   }
 
   .cap-body :global(strong) {
@@ -214,15 +268,11 @@ const categoryDescriptions: Record<string, string> = {
     font-weight: 600;
   }
 
-  .cap-body :global(ul) {
-    padding-left: 1.25rem;
-    margin-bottom: 0.75rem;
+  .cap-body :global(p) {
+    margin-bottom: 0.5rem;
   }
 
-  .cap-body :global(li) {
-    margin-bottom: 0.25rem;
-  }
-
+  /* === Timeline === */
   .not-looking {
     color: var(--text-dim);
     font-size: 0.9rem;
@@ -234,7 +284,6 @@ const categoryDescriptions: Record<string, string> = {
     color: var(--accent);
   }
 
-  /* Timeline */
   .timeline {
     position: relative;
     padding-left: 2rem;
@@ -348,7 +397,7 @@ const categoryDescriptions: Record<string, string> = {
     color: var(--text-dim);
   }
 
-  /* Learnings */
+  /* === Learnings === */
   .learnings-list {
     display: flex;
     flex-direction: column;
@@ -373,7 +422,8 @@ const categoryDescriptions: Record<string, string> = {
 
   .learning-meta {
     display: flex;
-    gap: 0.75rem;
+    align-items: center;
+    gap: 0.4rem;
     margin-bottom: 0.5rem;
   }
 
@@ -381,6 +431,11 @@ const categoryDescriptions: Record<string, string> = {
     font-size: 0.7rem;
     color: var(--text-dim);
     font-family: var(--font-mono);
+  }
+
+  .learning-divider {
+    color: var(--text-dim);
+    font-size: 0.7rem;
   }
 
   .learning-source {
@@ -399,7 +454,7 @@ const categoryDescriptions: Record<string, string> = {
     margin-bottom: 0.5rem;
   }
 
-  /* CTA */
+  /* === CTA === */
   .cta {
     padding: 2rem 0 3rem;
     border-top: 1px solid var(--border-subtle);
@@ -417,5 +472,8 @@ const categoryDescriptions: Record<string, string> = {
     .hero h1 { font-size: 2rem; }
     .timeline-header { flex-direction: column; gap: 0.25rem; }
     .timeline-period { align-self: flex-start; }
+    .cap-header { flex-wrap: wrap; }
+    .cap-stat { align-items: flex-start; flex-basis: 100%; flex-direction: row; gap: 0.4rem; margin-top: 0.25rem; }
+    .stat-label { text-align: left; }
   }
 </style>

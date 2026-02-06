@@ -30,10 +30,13 @@ const capabilities = defineCollection({
   loader: glob({ base: './src/content/capabilities', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     title: z.string(),
+    tagline: z.string().optional(),
     category: z.enum(['build', 'lead', 'operate', 'think', 'amplify']),
     icon: z.string(),
     proof: z.array(z.string()).optional(), // links to experiences that prove this
     order: z.number().optional(),
+    stat: z.string().optional(),        // standout number/metric
+    statLabel: z.string().optional(),   // what the stat means
   }),
 });
 
