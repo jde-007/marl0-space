@@ -1,0 +1,261 @@
+{
+  "config": {
+    "configFile": "/Users/thenuthouse/dev/github.com/jde/stostu/playwright.config.ts",
+    "rootDir": "/Users/thenuthouse/dev/github.com/jde/stostu/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 2
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/thenuthouse/dev/github.com/jde/stostu/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "setup",
+        "name": "setup",
+        "testDir": "/Users/thenuthouse/dev/github.com/jde/stostu/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/.*\\.setup\\.ts/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/thenuthouse/dev/github.com/jde/stostu/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "chromium-noauth",
+        "name": "chromium-noauth",
+        "testDir": "/Users/thenuthouse/dev/github.com/jde/stostu/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/auth\\.spec\\.ts/",
+          "/auth-forms\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/thenuthouse/dev/github.com/jde/stostu/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/thenuthouse/dev/github.com/jde/stostu/tests/e2e",
+        "testIgnore": [
+          "/auth\\.spec\\.ts/",
+          "/auth-forms\\.spec\\.ts/"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/thenuthouse/dev/github.com/jde/stostu/test-results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/Users/thenuthouse/dev/github.com/jde/stostu/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/.*\\.mobile\\.spec\\.ts/"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "test-results/html",
+          "open": "never"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 5,
+    "webServer": {
+      "command": "pnpm --filter @stostu/web dev",
+      "url": "http://localhost:7001",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "forms/auth-forms.spec.ts",
+      "file": "forms/auth-forms.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Sign Up Form",
+          "file": "forms/auth-forms.spec.ts",
+          "line": 14,
+          "column": 6,
+          "specs": [
+            {
+              "title": "displays all required fields",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-noauth",
+                  "projectName": "chromium-noauth",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 381,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-02-07T21:52:09.819Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/thenuthouse/dev/github.com/jde/stostu/test-results/artifacts/forms-auth-forms-Sign-Up-Form-displays-all-required-fields-chromium-noauth/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/thenuthouse/dev/github.com/jde/stostu/test-results/artifacts/forms-auth-forms-Sign-Up-Form-displays-all-required-fields-chromium-noauth/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/thenuthouse/dev/github.com/jde/stostu/test-results/artifacts/forms-auth-forms-Sign-Up-Form-displays-all-required-fields-chromium-noauth/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f55aadad78977c33ef83-f02f4804ee8ab8c9e277",
+              "file": "forms/auth-forms.spec.ts",
+              "line": 19,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "Sign In Form",
+          "file": "forms/auth-forms.spec.ts",
+          "line": 125,
+          "column": 6,
+          "specs": [
+            {
+              "title": "displays all required fields",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium-noauth",
+                  "projectName": "chromium-noauth",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 374,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-02-07T21:52:09.819Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/thenuthouse/dev/github.com/jde/stostu/test-results/artifacts/forms-auth-forms-Sign-In-Form-displays-all-required-fields-chromium-noauth/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/thenuthouse/dev/github.com/jde/stostu/test-results/artifacts/forms-auth-forms-Sign-In-Form-displays-all-required-fields-chromium-noauth/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/thenuthouse/dev/github.com/jde/stostu/test-results/artifacts/forms-auth-forms-Sign-In-Form-displays-all-required-fields-chromium-noauth/trace.zip"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "f55aadad78977c33ef83-b88dec59a869a6353284",
+              "file": "forms/auth-forms.spec.ts",
+              "line": 130,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-02-07T21:52:08.040Z",
+    "duration": 2435.948,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
