@@ -29,6 +29,11 @@ const { Content } = await render(project);
             View Dev ↗
           </a>
         )}
+        {project.data.repoUrl && (
+          <a href={project.data.repoUrl} target="_blank" class="repo-link">
+            GitHub ↗
+          </a>
+        )}
       </div>
       <p class="project-tagline">{project.data.tagline}</p>
       <div class="project-meta">
@@ -109,6 +114,22 @@ const { Content } = await render(project);
 
   .dev-link:hover {
     background: rgba(251, 191, 36, 0.1);
+    text-decoration: none;
+  }
+
+  .repo-link {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .repo-link:hover {
+    background: var(--surface);
+    color: var(--text);
     text-decoration: none;
   }
 

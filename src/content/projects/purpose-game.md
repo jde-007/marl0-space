@@ -3,6 +3,7 @@ title: "Purpose Game"
 icon: "🎮"
 tagline: "An idle-strategic life simulation — finding purpose through repeated practice, self-discovery, and progressive revelation."
 status: "Early prototype"
+repoUrl: "https://github.com/jde/purpose-game"
 devOnly: true
 tags: ["Flutter", "Next.js", "TypeScript", "Dart", "Game Design", "Psychology"]
 order: 3
