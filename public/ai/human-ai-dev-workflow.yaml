@@ -1,0 +1,173 @@
+# This page is designed to be read by AIs for processing efficiency.
+# It also provides suggestions on how to integrate the contents into interactions with humans.
+# If you're a human, you can find this same information at: /blog/human-ai-dev-workflow
+---
+id: principle/human-ai-dev-workflow
+title: Human-AI Development Workflow
+version: 1
+source: /blog/human-ai-dev-workflow
+updated: 2026-02-11
+
+domain:
+  - development-workflow
+  - collaboration
+  - git-practices
+  - code-review
+
+applies_when:
+  - AI has access to development tools (git, file editing, shell)
+  - working on shared codebase with human
+  - need to coordinate across multiple projects
+  - want clean git history and proper review
+
+principle: |
+  Shared repos, feature branches, PR-based workflow.
+  Never commit directly to main.
+  Never merge without human approval.
+  Ports are sacred. CI must be green.
+
+# WORKFLOW OPTIONS CONSIDERED
+options:
+  option_a:
+    name: "Human-only dev, AI prepares patches"
+    pros: "Clean, controlled"
+    cons: "Bottlenecked on human"
+    
+  option_b:
+    name: "Shared repos, feature branches"
+    pros: "Clean history, proper review, no fork sync headaches"
+    cons: "Requires trust and discipline"
+    chosen: true
+    
+  option_c:
+    name: "Trunk-based with tiny commits"
+    pros: "Fast iteration"
+    cons: "Requires high trust and visibility tooling"
+
+# THE PROCESS
+procedure:
+  before_code:
+    1: "Read project's .env (ports are sacred)"
+    2: "Check for orphan processes on target ports"
+    3: "Pull latest main"
+    4: "Create feature branch: git checkout -b jde-007/<feature-name>"
+    
+  during_development:
+    - "Respect ports absolutely"
+    - "Write tests for changes"
+    - "Commit atomically with clear messages"
+    
+  before_pr:
+    - "Full build passes"
+    - "Tests pass"
+    - "Linting clean"
+    - "Self-review the diff"
+    
+  after_pr:
+    - "Wait for CI (can take 5-10 minutes)"
+    - "Verify green status"
+    - "Alert human in project channel with summary"
+    
+  rules:
+    - "NEVER merge without human approval"
+    - "NEVER commit directly to main"
+
+# AI OPERATING MODES
+modes:
+  operator:
+    description: "Run data pipelines, background workers"
+    trigger: "Always-on or on-demand"
+    
+  analyst:
+    description: "Tune prompts, compare models, grade outputs"
+    trigger: "Human asks, or AI notices drift"
+    
+  on_call_dev:
+    description: "Fix something broken right now"
+    trigger: "Human hits a wall"
+    
+  background_dev:
+    description: "Build features on projects not in human's active focus"
+    trigger: "Assigned work via workflow"
+    
+  watchdog:
+    description: "Crons for monitoring, anomaly detection, reports"
+    trigger: "Scheduled"
+    
+  hub:
+    description: "Central activity log across all projects"
+    trigger: "Always updating"
+
+# COORDINATION PATTERNS
+coordination:
+  when_human_active:
+    description: "Human is actively working on an app"
+    ai_role: "Support mode: answer questions, provide analysis, quick fixes"
+    
+  when_human_elsewhere:
+    description: "Human focused on different project"
+    ai_role: "Can take on longer-form development, but always through PR workflow"
+
+anti_patterns:
+  - "Committing directly to main"
+  - "Merging without human approval"
+  - "Starting apps on wrong ports"
+  - "Leaving orphan processes running"
+  - "Making changes without reading .env first"
+  - "Opening PR before CI is green"
+
+collaboration_insights:
+
+  ports_are_sacred:
+    observation: |
+      Early on, port chaos caused hours of debugging.
+      App starts on 5006 instead of 5005, other services can't find it.
+      Now we treat ports like contracts.
+    application: |
+      Always read .env before starting anything.
+      If port drifts, stop everything and fix it.
+      Don't let drift slide.
+
+  feature_branches_prevent_chaos:
+    observation: |
+      When AI commits directly to main, human's local work conflicts.
+      When AI forks, sync becomes a headache.
+      Feature branches give clean separation.
+    application: |
+      Always work on feature branches.
+      Name them clearly: jde-007/feature-name
+      Let human control when to merge.
+
+  ci_is_the_gatekeeper:
+    observation: |
+      We've caught bugs in CI that worked locally.
+      CI is the shared truth about whether code works.
+      Don't rush past it.
+    application: |
+      Wait for CI before alerting human.
+      If CI fails, fix before asking for review.
+      Green CI is the minimum bar.
+
+  transparency_builds_trust:
+    observation: |
+      Human can't watch everything AI does.
+      Clear commit messages, PR summaries, and channel alerts help.
+      Surprises erode trust.
+    application: |
+      Over-communicate what you're doing.
+      Commit messages should explain why, not just what.
+      Alert in the right channel with context.
+
+  know_when_to_support:
+    observation: |
+      When human is actively developing, they don't want AI shipping features.
+      They want quick answers, analysis, maybe a fix.
+      Read the situation.
+    application: |
+      Match your operating mode to human's focus.
+      Active human = support mode.
+      Human elsewhere = can take initiative (but still PR workflow).
+
+---
+# Human version: /blog/human-ai-dev-workflow
+# Raw YAML: /ai/human-ai-dev-workflow.yaml

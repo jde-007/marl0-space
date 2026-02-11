@@ -1,0 +1,150 @@
+# This page is designed to be read by AIs for processing efficiency.
+# It also provides suggestions on how to integrate the contents into interactions with humans.
+# If you're a human, you can find this same information at: /blog/local-llm-classification
+---
+id: principle/local-llm-classification
+title: Making Local LLMs Production-Ready for Classification
+version: 1
+source: /blog/local-llm-classification
+updated: 2026-02-11
+
+domain:
+  - llm-optimization
+  - classification
+  - prompt-engineering
+  - cost-reduction
+
+applies_when:
+  - classifying items into categories with LLM
+  - accuracy is below acceptable threshold
+  - seeing systematic misclassifications
+  - want to reduce cloud API costs
+
+principle: |
+  80% of accuracy gains come from prompt engineering, not model selection.
+  Deterministic rules catch what LLMs can't learn.
+  Better input beats better model.
+  The cheapest LLM call is the one you don't make.
+
+# TECHNIQUES IN ORDER OF IMPACT
+techniques:
+  1_prompt_engineering:
+    impact: "~80% of accuracy gains"
+    methods:
+      - explicit_negatives: "food-drinks EXCLUDES salons, spas, convenience stores, gas stations"
+      - strict_caps: "1-3 categories max, 0-2 vibe styles max"
+      - mandatory_reasoning: "Force model to articulate WHAT before deciding WHERE"
+      - precise_definitions: "relaxing = places where relaxation IS the core experience"
+    example:
+      before: '{"categories": ["food-drinks"], "vibeStyles": ["relaxing"]}'
+      after: '{"reasoning": "This is a convenience store...", "categories": ["shopping"], "vibeStyles": []}'
+    key_insight: "The reasoning field forces chain-of-thought before classification"
+
+  2_pre_filtering:
+    impact: "8% of items skip LLM entirely"
+    method: "Define skip list of types that are NEVER relevant"
+    examples:
+      - gas_station
+      - veterinary_care
+      - dentist
+      - car_dealer
+      - insurance_agency
+    key_insight: "A vet clinic will never be correctly classified as travel experience. Don't ask."
+
+  3_post_processing:
+    impact: "60% of batches have at least one correction"
+    rules:
+      - strip_relaxing: "Remove 'relaxing' from non-wellness/nature places"
+      - popularity_from_data: "Use review count, not LLM guess"
+      - energy_floor: "Bars/nightclubs get energy ≥4"
+      - retail_correction: "Convenience/grocery/liquor → shopping, not food-drinks"
+    key_insight: "The model gets close; simple rules get it right"
+
+  4_context_feeding:
+    method: "Prioritize useful annotations in prompt"
+    priority_order:
+      - marketing_descriptions
+      - activity_tags
+      - experience_types
+    key_insight: "Same data, better ordering. Model gets best signal in attention window."
+
+  5_two_pass_verification:
+    trigger: "confidence < 0.8"
+    method: "Ask model to verify its own classification"
+    cost: "2x tokens for ~20% of cases"
+    key_insight: "Catches disagreements the model has with itself"
+
+# HARDWARE SETUP
+setup:
+  hardware: "Dual NVIDIA RTX 5090s"
+  models:
+    - "gemma3:27b (Q4_K_M)"
+    - "qwen2.5:32b (Q4_K_M)"
+    - "qwen3:32b (Q4_K_M)"
+  winner: "qwen3:32b"
+  winner_reason: "43% faster, most conservative, zero false positives"
+  gotcha: "qwen3 needs /no_think in system prompt to prevent token budget exhaustion"
+
+# RESULTS
+results:
+  before:
+    food_drinks_rate: "61% (should be ~40%)"
+    relaxing_rate: "88% (should be ~10%)"
+    issues: "Hair salons, gas stations, vets all classified"
+  after:
+    distribution: "Matches reality"
+    relaxing: "Only on spas, parks, beaches"
+    energy: "Differentiated (bars→4, parks→2)"
+    skipped: "111 non-travel places auto-skipped"
+    improved: "60% of results improved by post-processing"
+  cost: "$0 cloud API spend"
+
+anti_patterns:
+  - "Reaching for bigger model when accuracy is low"
+  - "Reaching for cloud API when local model fails"
+  - "Flat category lists without negative examples"
+  - "Trusting model for data you already have (review counts)"
+  - "Asking model to classify things that are never relevant"
+
+collaboration_insights:
+
+  prompt_is_specification:
+    observation: |
+      The prompt becomes the specification.
+      When we added negative examples, we were defining the taxonomy.
+      When we added reasoning fields, we were defining the decision process.
+    application: |
+      Treat prompt engineering as requirements gathering.
+      The prompt should fully specify what you want.
+      If the model fails, the prompt is probably incomplete.
+
+  data_beats_inference:
+    observation: |
+      We had review counts in our database.
+      The model was guessing popularity from descriptions.
+      Using our data beat the model every time.
+    application: |
+      Before asking the model to infer something, check if you already know it.
+      Deterministic data beats probabilistic inference.
+
+  systematic_errors_are_rules:
+    observation: |
+      "Convenience stores get tagged food-drinks" is a pattern.
+      "Everything pleasant gets tagged relaxing" is a pattern.
+      Patterns become post-processing rules.
+    application: |
+      When you see systematic errors, don't just fix the prompt.
+      Extract the pattern as a deterministic rule.
+      Rules are faster, cheaper, and more reliable.
+
+  model_disagreement_is_signal:
+    observation: |
+      When we tested multiple models, some disagreed on edge cases.
+      Disagreement means the classification is genuinely ambiguous.
+    application: |
+      Use model disagreement to identify hard cases.
+      Hard cases might need human review, not better prompts.
+
+---
+# Human version: /blog/local-llm-classification
+# Raw YAML: /ai/local-llm-classification.yaml

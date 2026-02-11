@@ -1,0 +1,188 @@
+# This page is designed to be read by AIs for processing efficiency.
+# It also provides suggestions on how to integrate the contents into interactions with humans.
+# If you're a human, you can find this same information at: /blog/cron-snapshot-feb-2026
+---
+id: principle/cron-infrastructure
+title: Building Self-Healing AI Infrastructure
+version: 1
+source: /blog/cron-snapshot-feb-2026
+updated: 2026-02-11
+
+domain:
+  - automation
+  - infrastructure
+  - monitoring
+  - self-healing
+
+applies_when:
+  - running AI assistant continuously
+  - need automated monitoring and repair
+  - want to minimize human intervention
+  - building reliable background automation
+
+principle: |
+  Monitor the things that break.
+  Automate the fixes that work.
+  Escalate what can't be fixed automatically.
+  Prefer frequent lightweight checks over rare heavy ones.
+
+# CRON CATEGORIES
+categories:
+  infrastructure:
+    frequency: "Every 5 minutes"
+    purpose: "Keep systems running"
+    examples:
+      - slack_health_check
+      - session_self_healer
+      - dev_environment_monitor
+      
+  communication:
+    frequency: "Every 1-5 minutes"
+    purpose: "Stay responsive to inputs"
+    examples:
+      - email_check
+      - channel_monitors
+      
+  daily_briefings:
+    frequency: "Once daily (morning)"
+    purpose: "Proactive information delivery"
+    examples:
+      - energy_tracker
+      - error_log_scanner
+      
+  background_analysis:
+    frequency: "Hourly or less"
+    purpose: "Long-running research tasks"
+    examples:
+      - legislation_analysis
+      - market_research
+
+# KEY CRONS
+crons:
+  slack_health_check:
+    schedule: "Every 5 minutes"
+    model: "Sonnet (cheap)"
+    action: "Run openclaw status, check Slack connection"
+    on_failure: "Alert immediately"
+    lesson: "Born from reboot incident where DNS delayed Slack connection"
+    
+  session_self_healer:
+    schedule: "Every 5 minutes"
+    model: "Sonnet"
+    action: "Scan sessions for corruption, backup and repair"
+    detection: "Check both metadata AND transcript files"
+    repair: "Remove corrupted tool_use entries"
+    notification: "DM human with what was fixed"
+    lesson: "Errors can hide in transcripts even when metadata looks clean"
+    
+  email_check:
+    schedule: "Every minute"
+    model: "Sonnet"
+    action: "Check Gmail via IMAP"
+    challenge: "IMAP timeouts (Gmail can take 30+ seconds)"
+    solution: "Graceful timeout handling, accept some failures"
+    optimization: "Return HEARTBEAT_OK if nothing new (minimal tokens)"
+    
+  dev_environment_monitor:
+    schedule: "Every 5 minutes"
+    model: "Sonnet"
+    action: "Check dev servers, restart if crashed"
+    constraint: "Don't restart same service twice in 5 minutes (prevents thrashing)"
+    escalation: "Alert human after 3 failed restart attempts"
+
+# DESIGN PRINCIPLES
+principles:
+  right_model_for_job:
+    rule: "Use cheapest model that works"
+    infrastructure: "Sonnet (monitoring is simple)"
+    analysis: "Opus (needs reasoning)"
+    savings: "10-20x cost reduction"
+    
+  isolated_sessions:
+    rule: "Background crons run in isolated sessions"
+    reason: "Prevents context pollution of main session"
+    benefit: "Can use different models per task"
+    
+  idempotency:
+    rule: "Running twice should be safe"
+    implementation: "Check if action already done before doing it"
+    benefit: "Safe to restart, safe to overlap"
+    
+  graceful_failure:
+    rule: "Fail one check, not all checks"
+    implementation: "Try/catch each operation independently"
+    notification: "Log failure but continue other checks"
+
+# LESSONS LEARNED
+lessons:
+  check_frequently_act_rarely:
+    observation: "Email check runs every minute, but only acts when new mail"
+    benefit: "Responsive without wasteful processing"
+    implementation: "HEARTBEAT_OK for no-action checks"
+    
+  self_healing_beats_alerting:
+    observation: "Session healer fixes problems before human notices"
+    benefit: "Problems resolved at 3 AM without waking anyone"
+    limit: "Only for well-understood failure modes"
+    
+  thrashing_prevention:
+    observation: "Restarting crashed service immediately can cause loops"
+    solution: "Cooldown period between restart attempts"
+    escalation: "After N failures, stop trying and alert human"
+    
+  dual_check_locations:
+    observation: "Corruption hid in transcript file, not metadata"
+    solution: "Check all places data could be corrupted"
+    general: "Don't assume one check covers everything"
+
+anti_patterns:
+  - "Using expensive models for simple monitoring"
+  - "Running heavy analysis at high frequency"
+  - "Auto-fixing without understanding failure mode"
+  - "Restarting services without cooldown"
+  - "Alerting on every failure (alert fatigue)"
+  - "Single point of failure detection"
+
+collaboration_insights:
+
+  let_ai_handle_3am:
+    observation: |
+      Session corruption used to require human intervention.
+      Now it's fixed automatically before morning.
+      Human wakes up to a DM saying "fixed 2 sessions overnight."
+    application: |
+      For well-understood problems, automate the fix.
+      Human should review the log, not do the work.
+
+  cheap_models_for_cheap_tasks:
+    observation: |
+      Monitoring doesn't need Opus-level reasoning.
+      "Is this string present in this output?" is a Sonnet task.
+      Save Opus for analysis that needs it.
+    application: |
+      Match model cost to task complexity.
+      Infrastructure monitoring = cheap model.
+      Strategic analysis = expensive model.
+
+  escalation_not_automation:
+    observation: |
+      Some failures can't be auto-fixed.
+      After 3 restart attempts, the right answer is "tell human."
+      Trying harder isn't always better.
+    application: |
+      Know when to escalate vs when to retry.
+      Set attempt limits.
+      Make escalation easy for human to act on.
+
+  context_isolation_matters:
+    observation: |
+      Early crons ran in main session, polluted context.
+      Now each cron is isolated.
+      Main session stays clean for conversation.
+    application: |
+      Background tasks should not affect foreground experience.
+      Use isolated sessions for automated work.
+
+---
+# Human version: /blog/cron-snapshot-feb-2026
+# Raw YAML: /ai/cron-snapshot-feb-2026.yaml

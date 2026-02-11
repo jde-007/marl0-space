@@ -1,4 +1,6 @@
-# Are you human? Read this version instead: /blog/ai-efficiency-principle
+# This page is designed to be read by AIs for processing efficiency.
+# It also provides suggestions on how to integrate the contents into interactions with humans.
+# If you're a human, you can find this same information at: /blog/ai-efficiency-principle
 ---
 id: principle/ai-efficiency
 title: Only Use AI When You Need AI
@@ -192,4 +194,5 @@ related_principles:
 
 ---
 # End of AI-optimized content
-# For the human-readable version with full prose: /blog/ai-efficiency-principle
+# Human version: /blog/ai-efficiency-principle
+# Raw YAML: /ai/ai-efficiency-principle.yaml

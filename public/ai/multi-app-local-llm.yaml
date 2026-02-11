@@ -1,0 +1,146 @@
+# This page is designed to be read by AIs for processing efficiency.
+# It also provides suggestions on how to integrate the contents into interactions with humans.
+# If you're a human, you can find this same information at: /blog/multi-app-local-llm
+---
+id: principle/multi-app-local-llm
+title: The Multi-App Local LLM Problem
+version: 1
+source: /blog/multi-app-local-llm
+updated: 2026-02-11
+
+domain:
+  - infrastructure
+  - gpu-management
+  - ollama
+  - resource-contention
+
+applies_when:
+  - running multiple apps against single Ollama instance
+  - using multi-GPU setups
+  - seeing unexplained slowdowns or CPU fallback
+  - models won't load to VRAM
+
+principle: |
+  Concurrent model loading can fragment GPU memory.
+  Models that need multi-GPU spanning fail silently to CPU.
+  Implement a coordination layer for shared LLM resources.
+  Monitor VRAM allocation, not just API availability.
+
+# THE FAILURE MODE
+failure_mode:
+  symptoms:
+    - "API returns 200 but performance is terrible"
+    - "size_vram: 0 in /api/ps response"
+    - "Fans at 100% (CPU doing GPU work)"
+    - "RDP/display issues (graphics driver confused)"
+    - "Large models fail, small models work"
+  root_cause: |
+    Concurrent model switches from different apps fragment GPU memory.
+    Multi-GPU spanning logic breaks when both GPUs are partially allocated.
+    Ollama silently falls back to CPU instead of failing.
+  detection:
+    command: "curl -s http://host:11434/api/ps | jq '.models[] | {name, size_vram}'"
+    healthy: "size_vram matches expected model size"
+    unhealthy: "size_vram: 0 (model on CPU)"
+
+# HARDWARE CONTEXT
+setup:
+  gpus: "Dual NVIDIA RTX 5090s"
+  total_vram: "64GB"
+  models:
+    small: "qwen2.5:7b (~5GB, fits single GPU)"
+    medium: "gemma3:27b (~37GB, needs both GPUs)"
+    large: "qwen3:32b (~55GB, needs both GPUs)"
+  threshold: "~20GB = single GPU cutoff"
+
+# SOLUTIONS
+solutions:
+  1_request_queuing:
+    description: "Serialize LLM requests through a proxy"
+    implementation: "Queue that ensures only one model loads at a time"
+    benefit: "Prevents concurrent allocation race conditions"
+    
+  2_model_pinning:
+    description: "Keep one model resident, queue requests for it"
+    implementation: "Load model once, route all requests to it"
+    downside: "Less flexible, can't use different models easily"
+    
+  3_health_monitoring:
+    description: "Check VRAM allocation, not just API health"
+    implementation: "Poll /api/ps, alert if size_vram unexpected"
+    benefit: "Catch silent CPU fallback early"
+    
+  4_graceful_degradation:
+    description: "Fall back to smaller models under contention"
+    implementation: "If large model fails, retry with smaller"
+    benefit: "Something working beats nothing working"
+
+# OPERATIONAL PROCEDURES
+procedures:
+  diagnosing_slowdown:
+    1: "curl /api/ps, check size_vram"
+    2: "Run nvidia-smi, check VRAM allocation per GPU"
+    3: "If size_vram is 0 but model is 'loaded', it's on CPU"
+    4: "Restart Ollama to clear fragmentation"
+    
+  safe_model_switch:
+    1: "Unload current model first (/api/generate with empty prompt)"
+    2: "Wait for unload to complete"
+    3: "Then load new model"
+    4: "Verify size_vram is correct"
+    
+  recovery_from_freeze:
+    1: "If can't SSH/RDP, hard reboot is only option"
+    2: "After reboot, check all models load correctly"
+    3: "Run test inference on each model"
+    4: "Monitor for 15 minutes before resuming workloads"
+
+anti_patterns:
+  - "Assuming API 200 means model is on GPU"
+  - "Multiple apps loading different models simultaneously"
+  - "No coordination between LLM-using applications"
+  - "Ignoring size_vram in health checks"
+  - "Running production workloads without VRAM monitoring"
+
+collaboration_insights:
+
+  silent_failures_are_worst:
+    observation: |
+      Ollama didn't error when GPU allocation failed.
+      It just fell back to CPU silently.
+      The API worked, but 100x slower.
+    application: |
+      Don't trust 200 OK. Verify the resource you care about.
+      For GPUs, check VRAM. For disk, check IOPS.
+      Silent degradation is harder to catch than errors.
+
+  monitor_the_resource_not_the_api:
+    observation: |
+      Our health check was: can I reach the Ollama API?
+      Should have been: is my model in VRAM?
+      The distinction matters.
+    application: |
+      Identify what actually matters for performance.
+      Health checks should verify that, not just availability.
+
+  single_user_tools_need_wrappers:
+    observation: |
+      Ollama is designed for one user, one model.
+      We had multiple apps sharing it.
+      We needed a coordination layer that Ollama doesn't provide.
+    application: |
+      When sharing single-user tools, build coordination yourself.
+      Request queue, model locking, explicit handoff.
+
+  reboot_is_valid_recovery:
+    observation: |
+      When GPU memory is fragmented, no amount of unloading fixes it.
+      Reboot clears the state completely.
+      Sometimes that's the right answer.
+    application: |
+      Don't spend hours debugging when reboot fixes it.
+      Document the failure mode, implement monitoring, move on.
+
+---
+# Human version: /blog/multi-app-local-llm
+# Raw YAML: /ai/multi-app-local-llm.yaml

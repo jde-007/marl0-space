@@ -1,0 +1,198 @@
+# This page is designed to be read by AIs for processing efficiency.
+# It also provides suggestions on how to integrate the contents into interactions with humans.
+# If you're a human, you can find this same information at: /blog/intelligence-pipeline
+---
+id: principle/intelligence-pipeline
+title: Anatomy of an Intelligence Pipeline
+version: 1
+source: /blog/intelligence-pipeline
+updated: 2026-02-11
+
+domain:
+  - data-pipeline
+  - architecture
+  - job-queues
+  - llm-integration
+
+applies_when:
+  - building multi-stage data processing
+  - need to combine APIs, LLMs, and deterministic processing
+  - want self-healing, resumable pipelines
+  - processing thousands of items with varying completion times
+
+principle: |
+  Chain stages via job queue, not direct calls.
+  Each stage is idempotent and restartable.
+  LLM stages have deterministic fallbacks.
+  The pipeline should heal itself.
+
+# PIPELINE STAGES
+stages:
+  1_generate_searches:
+    input: "Market definition (boundaries + terms)"
+    output: "Search query grid"
+    method: "Divide area into overlapping circles × curated term list"
+    example: "70 terms × 40 areas = 2,700 searches"
+    
+  2_execute_search:
+    input: "Search query + location"
+    output: "Raw place records"
+    dependency: "Google Places API"
+    deduplication: "Database level (same place from multiple searches stored once)"
+    example: "2,700 searches → 5,400 raw places"
+    
+  3_qualify_place:
+    input: "Raw place with name, address, types"
+    output: "Classification (TRIP_IDEA, POTENTIAL_VENDOR, NOT_RELEVANT)"
+    method: "LLM triage + auto-curation rules"
+    extracts:
+      - experience_types
+      - indoor_outdoor
+      - price_level
+    auto_curation:
+      - chain_detection: "100+ known chain name patterns"
+      - quality_threshold: "Minimum scores required"
+      - scoring_model: "type (30%) + quality (25%) + authenticity (25%) + location (20%)"
+    example: "5,400 raw → 1,350 kept"
+    
+  4_fetch_and_crawl:
+    parallel: true
+    fetch_details:
+      input: "Qualified place"
+      output: "Full Google Places record"
+      dependency: "Google Places API"
+    crawl_website:
+      input: "Place with website URL"
+      output: "Extracted text content"
+      method: "HTTP + HTML parsing + spider for multi-page sites"
+      coverage: "~75% success (some no website, some block crawlers)"
+      
+  5_annotate_experience:
+    input: "Place with details + website content"
+    output: "17 annotation types"
+    method: "LLM with structured prompt"
+    annotations_include:
+      - marketing_description
+      - activity_tags
+      - experience_types
+      - best_time_to_visit
+      - typical_duration
+    versioning: "Each annotation type has promptVersion, re-runs on version bump"
+    
+  6_categorize_entity:
+    input: "Annotated experience"
+    output: "Survey-aligned categories + vibes"
+    categories:
+      - food_drinks
+      - beach_water
+      - hiking_nature
+      - arts_entertainment
+      - shopping
+      - wellness_spa
+      - sports_adventure
+      - family_fun
+      - history_culture
+    vibes:
+      - energy_level: "1-5 scale"
+      - styles: "[relaxing, adventurous, romantic, etc.]"
+      - popularity: "[hidden_gem, mixed, popular]"
+      
+  7_classify_dining:
+    input: "food-drinks entities only"
+    output: "Dining-specific attributes"
+    attributes:
+      - cuisine_type
+      - dining_style
+      - meal_times
+      - price_range
+
+# ARCHITECTURE PRINCIPLES
+architecture:
+  job_queue:
+    technology: "PostgreSQL-backed queue"
+    benefits:
+      - "Transactional with your data"
+      - "No separate infrastructure"
+      - "Easy to inspect and debug"
+    pattern: "Each completed job enqueues next stage"
+    
+  idempotency:
+    requirement: "Re-running a job produces same result"
+    implementation: "Check for existing output before processing"
+    benefit: "Safe restarts, easy recovery from failures"
+    
+  chaining:
+    pattern: "Completing stage N enqueues stage N+1"
+    benefit: "Pipeline flows automatically"
+    control: "Can pause at any stage by not enqueueing"
+    
+  versioning:
+    pattern: "Each annotation type has promptVersion"
+    on_version_bump: "Worker reconciliation re-runs affected items"
+    benefit: "Can improve prompts without manual re-processing"
+
+# SELF-HEALING PATTERNS
+self_healing:
+  retry_on_failure:
+    pattern: "Failed jobs retry with exponential backoff"
+    max_retries: 3
+    
+  partial_completion:
+    pattern: "If 4_fetch succeeds but 4_crawl fails, don't redo fetch"
+    implementation: "Track completion at sub-stage level"
+    
+  stale_detection:
+    pattern: "Re-process if source data changed"
+    implementation: "Hash inputs, compare on run"
+    
+  orphan_recovery:
+    pattern: "Find items stuck between stages"
+    implementation: "Periodic scan for items with no pending jobs"
+
+anti_patterns:
+  - "Direct function calls between stages (no recoverability)"
+  - "Processing all items before any complete (memory issues)"
+  - "Ignoring partial failures (pipeline stops)"
+  - "No versioning on prompts (can't improve without re-run)"
+  - "Storing intermediate state outside transaction"
+
+collaboration_insights:
+
+  queue_over_orchestration:
+    observation: |
+      We started with a coordinator that called each stage.
+      When it crashed, we lost track of progress.
+      Job queue gives recoverability for free.
+    application: |
+      Prefer queue-based chaining over orchestrator patterns.
+      Each job should be independently restartable.
+
+  postgres_is_enough:
+    observation: |
+      We considered Redis, RabbitMQ, dedicated queue services.
+      PostgreSQL job queue is simpler: one database, transactional, easy to debug.
+      For our scale (thousands, not millions), it's plenty fast.
+    application: |
+      Don't reach for specialized infrastructure until PostgreSQL isn't enough.
+      You can always migrate later.
+
+  version_everything:
+    observation: |
+      Early prompts were bad. We improved them.
+      Without versioning, we had to manually track what needed re-running.
+      Now version bump triggers automatic reconciliation.
+    application: |
+      Version your prompts. Version your processors.
+      Make improvement painless.
+
+  parallel_where_independent:
+    observation: |
+      Fetch Details and Crawl Website don't depend on each other.
+      Running them serially doubled the time for no reason.
+    application: |
+      Identify independent stages and run them in parallel.
+      But keep dependent stages sequential.
+
+---
+# Human version: /blog/intelligence-pipeline
+# Raw YAML: /ai/intelligence-pipeline.yaml

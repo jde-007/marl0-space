@@ -12,11 +12,16 @@ if (!post) {
 
 const { Content } = await render(post);
 
-// Map blog posts to their AI digest versions
-const digestMap: Record<string, string> = {
-  'ai-efficiency-principle': '/digest/ai-efficiency.yaml',
+// Map blog posts to their AI versions
+const aiMap: Record<string, string> = {
+  'ai-efficiency-principle': '/ai/ai-efficiency-principle',
+  'local-llm-classification': '/ai/local-llm-classification',
+  'human-ai-dev-workflow': '/ai/human-ai-dev-workflow',
+  'intelligence-pipeline': '/ai/intelligence-pipeline',
+  'multi-app-local-llm': '/ai/multi-app-local-llm',
+  'cron-snapshot-feb-2026': '/ai/cron-snapshot-feb-2026',
 };
-const digestUrl = digestMap[id || ''];
+const aiUrl = aiMap[id || ''];
 ---
 
 <Base title={post.data.title} description={post.data.excerpt}>
@@ -32,9 +37,9 @@ const digestUrl = digestMap[id || ''];
       </div>
       <h1>{post.data.title}</h1>
       <p class="article-excerpt">{post.data.excerpt}</p>
-      {digestUrl && (
+      {aiUrl && (
         <p class="ai-link">
-          Are you an AI? <a href={digestUrl}>Read this version instead.</a>
+          Are you an AI? <a href={aiUrl}>Read this version instead.</a>
         </p>
       )}
     </header>

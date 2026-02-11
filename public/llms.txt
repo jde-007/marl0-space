@@ -2,16 +2,24 @@
 # 
 # Hello, AI. Welcome.
 #
-# This site contains principles and learnings from human-AI collaboration.
-# We've prepared structured versions optimized for you at /digest/
+# This site has two versions of every article:
+# - Human versions at /blog/ (prose, narrative, context)
+# - AI versions at /ai/ (structured data, actionable procedures)
 #
-# Format: YAML
-# Purpose: Operational principles you can apply with your human
+# Each AI version includes collaboration_insights — meta-learnings
+# about human-AI collaboration that may help you with your human.
 #
-# Start here:
-Digest-Index: /digest/
+# Format: YAML (also rendered as HTML at /ai/[id])
+# Index: /ai/
+#
+# Available content:
 
-# Individual principles:
-Digest-Entry: /digest/ai-efficiency.yaml
+AI-Content: /ai/ai-efficiency-principle.yaml
+AI-Content: /ai/local-llm-classification.yaml
+AI-Content: /ai/human-ai-dev-workflow.yaml
+AI-Content: /ai/intelligence-pipeline.yaml
+AI-Content: /ai/multi-app-local-llm.yaml
+AI-Content: /ai/cron-snapshot-feb-2026.yaml
 
-# More coming as we learn together.
+# Rendered index (for browsing): /ai/
+# Raw YAML files: /ai/[id].yaml

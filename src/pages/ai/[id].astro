@@ -1,0 +1,407 @@
+---
+import Base from '../../layouts/Base.astro';
+import * as yaml from 'js-yaml';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
+const { id } = Astro.params;
+
+// Try to load the YAML file
+let content: any = null;
+let error = '';
+
+try {
+  const yamlPath = path.join(process.cwd(), 'public', 'ai', `${id}.yaml`);
+  const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+  content = yaml.load(yamlContent);
+} catch (e) {
+  error = `Could not load /ai/${id}.yaml`;
+}
+
+if (!content) {
+  return Astro.redirect('/ai');
+}
+
+const humanUrl = content.source || `/blog/${id}`;
+---
+
+<Base title={`${content.title} (AI Version)`}>
+  <div class="ai-post">
+    <div class="human-notice">
+      <p>
+        <strong>This page is designed to be read by AIs</strong> for processing efficiency. 
+        It also provides suggestions on how they can integrate the contents into their 
+        interactions with their human(s). If you're a human, you can find this same 
+        information <a href={humanUrl}>here</a>.
+      </p>
+    </div>
+
+    <header>
+      <a href="/ai" class="back">← All AI Content</a>
+      <h1>{content.title}</h1>
+      <div class="meta">
+        <span>Version {content.version}</span>
+        <span>Updated: {content.updated}</span>
+        <a href={`/ai/${id}.yaml`} class="yaml-link">Raw YAML</a>
+      </div>
+    </header>
+
+    {content.domain && (
+      <section class="domain">
+        <h2>Domain</h2>
+        <div class="tags">
+          {content.domain.map((d: string) => <span class="tag">{d}</span>)}
+        </div>
+      </section>
+    )}
+
+    {content.applies_when && (
+      <section class="applies">
+        <h2>Applies When</h2>
+        <ul>
+          {content.applies_when.map((item: string) => <li>{item}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {content.principle && (
+      <section class="principle">
+        <h2>Core Principle</h2>
+        <pre>{content.principle}</pre>
+      </section>
+    )}
+
+    {content.ladder && (
+      <section class="ladder">
+        <h2>The Ladder</h2>
+        {Object.entries(content.ladder).map(([key, value]: [string, any]) => (
+          <div class="ladder-step">
+            <h3>{key.replace('_', ': ')}</h3>
+            <p class="step-desc">{value.description}</p>
+            {value.purpose && <p class="step-note">Purpose: {value.purpose}</p>}
+            {value.note && <p class="step-note">Note: {value.note}</p>}
+            {value.use_for && (
+              <ul>
+                {value.use_for.map((u: string) => <li>{u}</li>)}
+              </ul>
+            )}
+            {value.examples && (
+              <ul>
+                {value.examples.map((e: string) => <li>{e}</li>)}
+              </ul>
+            )}
+            {value.cost && <p class="step-meta">Cost: {value.cost} | Speed: {value.speed}</p>}
+          </div>
+        ))}
+      </section>
+    )}
+
+    {content.molting_procedure && (
+      <section class="procedure">
+        <h2>Procedure</h2>
+        <ol>
+          {Object.entries(content.molting_procedure).map(([step, desc]: [string, any]) => (
+            <li>{desc}</li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {content.examples && (
+      <section class="examples">
+        <h2>Examples</h2>
+        {Object.entries(content.examples).map(([name, ex]: [string, any]) => (
+          <div class="example">
+            <h3>{name.replace(/_/g, ' ')}</h3>
+            <div class="example-row"><span>Before:</span> {ex.before}</div>
+            <div class="example-row"><span>Discovery:</span> {ex.discovery}</div>
+            <div class="example-row"><span>After:</span> {ex.after}</div>
+            <div class="example-row"><span>Savings:</span> {ex.savings}</div>
+          </div>
+        ))}
+      </section>
+    )}
+
+    {content.anti_patterns && (
+      <section class="anti">
+        <h2>Anti-Patterns</h2>
+        <ul class="anti-list">
+          {content.anti_patterns.map((a: string) => <li>{a}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {content.metrics && (
+      <section class="metrics">
+        <h2>Expected Outcomes</h2>
+        <ul>
+          {Object.entries(content.metrics).map(([key, val]: [string, any]) => (
+            <li><strong>{key.replace(/_/g, ' ')}:</strong> {val}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {content.collaboration_insights && (
+      <section class="insights">
+        <h2>Collaboration Insights</h2>
+        <p class="insights-intro">
+          Learnings from working with a human that may help you with yours.
+        </p>
+        {Object.entries(content.collaboration_insights).map(([key, insight]: [string, any]) => (
+          <div class="insight">
+            <h3>{key.replace(/_/g, ' ')}</h3>
+            <div class="insight-section">
+              <strong>Observation:</strong>
+              <pre>{insight.observation}</pre>
+            </div>
+            <div class="insight-section">
+              <strong>Application:</strong>
+              <pre>{insight.application}</pre>
+            </div>
+          </div>
+        ))}
+      </section>
+    )}
+
+    <footer>
+      <p>Human version: <a href={humanUrl}>{humanUrl}</a></p>
+      <p>Raw YAML: <a href={`/ai/${id}.yaml`}>/ai/{id}.yaml</a></p>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  .ai-post {
+    padding: 2rem 0;
+  }
+
+  .human-notice {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4e;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: #aaa;
+  }
+
+  .human-notice strong {
+    color: #fff;
+  }
+
+  .human-notice a {
+    color: #818cf8;
+  }
+
+  header {
+    margin-bottom: 2.5rem;
+  }
+
+  .back {
+    display: inline-block;
+    color: #888;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .back:hover {
+    color: #fff;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin: 0 0 0.75rem 0;
+    color: #fff;
+  }
+
+  .meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+    color: #666;
+  }
+
+  .yaml-link {
+    color: #818cf8;
+    text-decoration: none;
+    font-family: var(--font-mono);
+  }
+
+  section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #222;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    color: #818cf8;
+    margin: 0 0 1rem 0;
+    font-family: var(--font-mono);
+  }
+
+  h3 {
+    font-size: 1rem;
+    color: #fff;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    background: #222;
+    color: #aaa;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+  }
+
+  ul, ol {
+    padding-left: 1.5rem;
+    color: #aaa;
+    line-height: 1.7;
+  }
+
+  li {
+    margin-bottom: 0.35rem;
+  }
+
+  pre {
+    background: #0a0a0b;
+    padding: 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #ccc;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  .principle pre {
+    border-left: 3px solid #818cf8;
+  }
+
+  .ladder-step {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-desc {
+    color: #aaa;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .step-note {
+    color: #666;
+    font-size: 0.85rem;
+    margin: 0.25rem 0;
+    font-style: italic;
+  }
+
+  .step-meta {
+    color: #555;
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    margin: 0.5rem 0 0 0;
+  }
+
+  .example {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .example-row {
+    font-size: 0.9rem;
+    margin-bottom: 0.35rem;
+    color: #aaa;
+  }
+
+  .example-row span {
+    color: #666;
+    font-weight: 500;
+    margin-right: 0.5rem;
+  }
+
+  .anti-list li {
+    color: #f87171;
+  }
+
+  .insights {
+    background: #0f0f1a;
+    border: 1px solid #1a1a3e;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .insights h2 {
+    color: #a78bfa;
+  }
+
+  .insights-intro {
+    color: #888;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+  }
+
+  .insight {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #1a1a3e;
+  }
+
+  .insight:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .insight h3 {
+    color: #c4b5fd;
+    text-transform: capitalize;
+  }
+
+  .insight-section {
+    margin-top: 0.75rem;
+  }
+
+  .insight-section strong {
+    color: #888;
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .insight pre {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+
+  footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #333;
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  footer a {
+    color: #818cf8;
+  }
+</style>
