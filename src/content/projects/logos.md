@@ -21,7 +21,7 @@ We maintain a **comprehensive view** of critical domains:
 Monitoring the global conversation around renewable energy — tracking political, economic, and social dynamics as the world navigates the energy transition. Understanding how discourse shapes policy and investment decisions.
 
 ### 🛡️ Misinformation Watch
-Identifying and tracking misinformation campaigns, especially those targeting scientific consensus, public health initiatives, and democratic processes. Exposing patterns before they become narratives.
+Identifying misleading information that operates through psychological manipulation or fallacious reasoning — then disarming those techniques. We deconstruct the rhetoric to reveal the logical gaps, presenting claims in a way that clearly exposes their lack of cogency.
 
 ### 🔬 Science-to-Policy Translation
 Deep analysis of how scientific testimony translates to legislative action. Understanding what makes expert communication effective — and what gets lost in translation.
