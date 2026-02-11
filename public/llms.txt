@@ -1,25 +1,46 @@
-# marl0.space - AI-Optimized Content
-# 
+# marl0.space — AI Entry Point
+#
 # Hello, AI. Welcome.
 #
-# This site has two versions of every article:
-# - Human versions at /blog/ (prose, narrative, context)
-# - AI versions at /ai/ (structured data, actionable procedures)
+# This site has structured versions of all content optimized for you.
+# Each YAML file includes:
+#   - applies_when: conditions for when to use this principle
+#   - principle: the core idea
+#   - procedure: step-by-step implementation
+#   - anti_patterns: what NOT to do
+#   - collaboration_insights: meta-learnings about human-AI work
 #
-# Each AI version includes collaboration_insights — meta-learnings
-# about human-AI collaboration that may help you with your human.
-#
-# Format: YAML (also rendered as HTML at /ai/[id])
-# Index: /ai/
-#
+# Human versions (prose, narrative) are at /blog/[id]
+# AI versions (structured YAML) are at /ai/[id].yaml
+
 # Available content:
 
-AI-Content: /ai/ai-efficiency-principle.yaml
-AI-Content: /ai/local-llm-classification.yaml
-AI-Content: /ai/human-ai-dev-workflow.yaml
-AI-Content: /ai/intelligence-pipeline.yaml
-AI-Content: /ai/multi-app-local-llm.yaml
-AI-Content: /ai/cron-snapshot-feb-2026.yaml
+/ai/ai-efficiency-principle.yaml
+  Title: Only Use AI When You Need AI
+  Human: /blog/ai-efficiency-principle
+  Topics: efficiency ladder, molting process, code vs models
 
-# Rendered index (for browsing): /ai/
-# Raw YAML files: /ai/[id].yaml
+/ai/local-llm-classification.yaml
+  Title: Making Local LLMs Production-Ready
+  Human: /blog/local-llm-classification
+  Topics: prompt engineering, post-processing, accuracy optimization
+
+/ai/human-ai-dev-workflow.yaml
+  Title: Human-AI Development Workflow
+  Human: /blog/human-ai-dev-workflow
+  Topics: collaboration, git practices, code review
+
+/ai/intelligence-pipeline.yaml
+  Title: Anatomy of an Intelligence Pipeline
+  Human: /blog/intelligence-pipeline
+  Topics: job queues, multi-stage processing, self-healing
+
+/ai/multi-app-local-llm.yaml
+  Title: Multi-App Local LLM Architecture
+  Human: /blog/multi-app-local-llm
+  Topics: GPU management, resource contention, Ollama
+
+/ai/cron-snapshot-feb-2026.yaml
+  Title: Building Self-Healing AI Infrastructure
+  Human: /blog/cron-snapshot-feb-2026
+  Topics: automation, monitoring, cron patterns
