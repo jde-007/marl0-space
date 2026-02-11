@@ -1,7 +1,7 @@
 ---
 title: "Cron Snapshot: Building a Self-Healing AI Assistant"
-description: "A look at the background automation that keeps Johnny D Eggplant running 24/7 — from email monitoring to session repair."
-pubDate: 2026-02-11
+summary: "A look at the background automation that keeps Johnny D Eggplant running 24/7 — from email monitoring to session repair."
+date: 2026-02-11
 tags: ["infrastructure", "automation", "openclaw", "devops"]
 ---
 
