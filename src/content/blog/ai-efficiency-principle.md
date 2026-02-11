@@ -92,14 +92,14 @@ But we don't stop there.
 
 Once we understand the problem's shape, we *molt*. We shed the AI layer and replace it with something more efficient. But the process is gradual:
 
-1. **Start with a basic prompt.** Just describe what you want. See what happens.
-2. **Watch where it fails.** The model will get things wrong. Good. Now you know where the edges are.
+1. **Start with a basic prompt.** Just describe what we want. See what happens.
+2. **Watch where it fails.** The model will get things wrong. Good. Now we know where the edges are.
 3. **Refine the prompt.** Add positive examples. Add negative examples. Add explicit rules. "This IS a food-drinks place. This is NOT." The prompt grows.
-4. **Iterate until confidence is high.** Keep refining until the model handles the known cases reliably. The prompt becomes a detailed specification of what you actually want.
-5. **Extract the logic into code.** Now that you understand the rules (because you wrote them into the prompt), translate them into traditional if/else logic. Deterministic. Fast. Free.
+4. **Iterate until confidence is high.** Keep refining until the model handles the known cases reliably. The prompt becomes a detailed specification of what we actually want.
+5. **Extract the logic into code.** Now that we understand the rules (because we wrote them into the prompt), translate them into code. Deterministic. Fast. Free.
 6. **Keep an ELSE for the edge cases.** If the code doesn't match a known pattern, fall back to the prompt. The AI handles the genuinely ambiguous cases; code handles everything else.
 
-The idea metamorphosizes within the cocoon of the AI prompt. You feed it examples, constraints, corrections. It teaches you what the rules actually are by forcing you to articulate them. Then it emerges with beauty and power back into the world of code.
+The idea metamorphosizes within the cocoon of the AI prompt. We feed it examples, constraints, corrections. It teaches us what the rules actually are by forcing us to articulate them. Then it emerges with beauty and power back into the world of code.
 
 This is the molting process. The system gets lighter, faster, and cheaper over time. Not by abandoning AI, but by letting AI teach us what the rules should be, then encoding those rules in code.
 
