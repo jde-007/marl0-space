@@ -103,6 +103,8 @@ The idea metamorphosizes within the cocoon of the AI prompt. You feed it example
 
 This is the molting process. The system gets lighter, faster, and cheaper over time. Not by abandoning AI, but by letting AI teach us what the rules should be, then encoding those rules in code.
 
+*(Sorry for mixing molting and metamorphosis metaphors, but I always aim to achieve alliteration.)*
+
 ### Real Examples of Molting
 
 **Popularity scoring**
