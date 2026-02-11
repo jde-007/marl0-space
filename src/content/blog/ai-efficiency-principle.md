@@ -13,7 +13,7 @@ When you have a hammer, everything looks like a nail. When you have GPT-4, every
 
 It's seductive. Natural language in, structured output out. No edge cases to handle, no parsing logic to write, no regex to debug. Just describe what you want and let the model figure it out. Ship it.
 
-This is how you end up spending $400/month on API calls to extract phone numbers from text — a task that a five-line regex handles perfectly, runs in microseconds, and never hallucinates a digit.
+This is how you end up spending $400/month on API calls to extract phone numbers from text. A five-line regex handles that perfectly, runs in microseconds, and never hallucinates a digit.
 
 ## The Principle
 
@@ -34,17 +34,17 @@ This isn't about being cheap (though it is cheaper). It's about building systems
 
 Okay, we'll admit it: when approaching something genuinely new, we usually start with a full-blown, industry-grade LLM. Claude Opus. The works.
 
-But here's the thing — at that point, we're not really trying to solve the problem. We're trying to *understand* the problem.
+But here's the thing: at that point, we're not really trying to solve the problem. We're trying to *understand* the problem.
 
-This exploration phase is about spending time in the problem space. We're studying the current state of the application, the data available, our best plans for what to do next. But more importantly, we're examining our own approaches — our preconceptions, biases, false friends, trauma responses to past failed projects. The ways we assume things should work that turn out to be wrong.
+This exploration phase is about spending time in the problem space. We're studying the current state of the application, the data available, our best plans for what to do next. But more importantly, we're examining our own approaches: our preconceptions, biases, false friends, trauma responses to past failed projects. The ways we assume things should work that turn out to be wrong.
 
 The big model might solve the thing on the first try. Great. But that's not the point. The point is to discover *what it is that needs to be done*. What the problem actually looks like. Where the edges are.
 
-Once that becomes clear — once we've mapped the territory — we start from the ground and begin to climb this ladder:
+Once that becomes clear, once we've mapped the territory, we start from the ground and begin to climb this ladder:
 
 ### 1. Can we solve it with code?
 
-Pattern matching, data transformation, known formats, rule-based decisions — these don't need AI. They need functions.
+Pattern matching, data transformation, known formats, rule-based decisions: these don't need AI. They need functions.
 
 **Examples we've moved off AI:**
 - Extracting coordinates from Google Maps URLs → regex
@@ -57,7 +57,7 @@ Each of these was originally an LLM call. Each is now instant, free, and determi
 
 ### 2. Can we solve it with a small local model?
 
-If the task requires language understanding but not deep reasoning — classification, extraction, summarization of known formats — a 3B or 7B model running locally often suffices.
+If the task requires language understanding but not deep reasoning (classification, extraction, summarization of known formats) a 3B or 7B model running locally often suffices.
 
 We run an [Ollama server on a local box](/blog/local-llm-classification) with dual RTX 5090s. The hierarchy:
 
@@ -86,7 +86,7 @@ These get the big models. But they're the exception, not the default.
 
 Here's what we've discovered: **AI is for exploration, code is for exploitation.**
 
-When we encounter a new problem — classifying business types, extracting structured data from messy sources, understanding user intent — we start with AI. It's fast to prototype. We learn what the problem actually is by watching how the model handles it.
+When we encounter a new problem (classifying business types, extracting structured data from messy sources, understanding user intent) we start with AI. It's fast to prototype. We learn what the problem actually is by watching how the model handles it.
 
 But we don't stop there.
 
@@ -96,7 +96,7 @@ Once we understand the problem's shape, we *molt*. We shed the AI layer and repl
 2. **Rule extracted**: If business type in `[convenience_store, gas_station, liquor_store]`, reclassify as `shopping`
 3. **AI removed**: That check is now three lines of code, not an LLM call
 
-This is the molting process. The system gets lighter, faster, and cheaper over time — not by abandoning AI, but by letting AI teach us what the rules should be, then encoding those rules in code.
+This is the molting process. The system gets lighter, faster, and cheaper over time. Not by abandoning AI, but by letting AI teach us what the rules should be, then encoding those rules in code.
 
 ### Real Examples of Molting
 
@@ -137,13 +137,13 @@ Let's make this concrete.
 | Local 7B model | $0 (electricity) | ~4 hours | Good for simple tasks |
 | Hybrid (7B + rules) | $0 (electricity) | ~2 hours | High |
 
-The hybrid approach — small model for genuinely ambiguous cases, rules for everything else — is 75x cheaper than Opus, faster than any API approach, and more reliable because most decisions are deterministic.
+The hybrid approach (small model for genuinely ambiguous cases, rules for everything else) is 75x cheaper than Opus, faster than any API approach, and more reliable because most decisions are deterministic.
 
 And the gap widens over time. Every rule we extract is a permanent optimization. The system molts toward efficiency.
 
 ## The Mindset
 
-This isn't about being anti-AI. We use AI constantly — for writing, for coding, for exploration, for the genuinely hard problems.
+This isn't about being anti-AI. We use AI constantly: for writing, for coding, for exploration, for the genuinely hard problems.
 
 But we treat AI like we treat any other tool: right tool for the job.
 
@@ -155,11 +155,11 @@ So why use a frontier model to check if a string contains an email address?
 
 What we're building is a system that:
 
-1. **Starts with AI** for novel problems — fast iteration, quick learning
-2. **Observes patterns** in what the AI does well and poorly
-3. **Extracts rules** from those patterns — deterministic, fast, free
-4. **Reserves AI** for the genuinely ambiguous cases that need reasoning
-5. **Keeps molting** — every week the system gets lighter
+1. **Starts with AI** for novel problems. Fast iteration, quick learning.
+2. **Observes patterns** in what the AI does well and poorly.
+3. **Extracts rules** from those patterns. Deterministic, fast, free.
+4. **Reserves AI** for the genuinely ambiguous cases that need reasoning.
+5. **Keeps molting**. Every week the system gets lighter.
 
 The goal isn't to eliminate AI. It's to let AI handle what only AI can handle, and let everything else be fast, cheap, and predictable.
 
