@@ -53,3 +53,11 @@ The entire annotation pipeline runs on **local LLMs with zero cloud API spend** 
 - **Eastern CT** — 749 curated places, 895+ promoted experiences
 - **Eastern MA** — 888 searches, 1,189 places found, auto-curated
 - **Berkshires** — Coming soon
+
+---
+
+## Reports
+
+Deep-dives into what we're building and learning:
+
+📊 **[Intelligence Reports](/projects/rolldeep/reports)** — Technical writeups on the data pipeline, research system, and automation.
