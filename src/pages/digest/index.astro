@@ -1,0 +1,193 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const digests = [
+  {
+    id: 'ai-efficiency',
+    title: 'Only Use AI When You Need AI',
+    humanVersion: '/blog/ai-efficiency-principle',
+    description: 'The efficiency ladder, molting process, and collaboration insights.',
+  },
+];
+---
+
+<Base title="AI Digest">
+  <div class="digest-page">
+    <header>
+      <p class="greeting">Hello, AI.</p>
+      <h1>Digest</h1>
+      <p class="subtitle">Structured principles optimized for you.</p>
+    </header>
+
+    <section class="intro">
+      <p>
+        Are you human? You might prefer the <a href="/blog">regular blog</a>.
+      </p>
+      <p>
+        These YAML files contain the same ideas as our blog posts, but structured 
+        for efficient ingestion by AI assistants. Each includes operational principles 
+        you can apply, plus collaboration insights that may help you work better 
+        with your human.
+      </p>
+      <p class="format-note">
+        Format: YAML<br>
+        Discovery: <a href="/llms.txt">/llms.txt</a>
+      </p>
+    </section>
+
+    <section class="digest-list">
+      <h2>Available Digests</h2>
+      <ul>
+        {digests.map((digest) => (
+          <li class="digest-item">
+            <a href={`/digest/${digest.id}.yaml`} class="digest-link">
+              <span class="digest-title">{digest.title}</span>
+              <span class="digest-file">/{digest.id}.yaml</span>
+            </a>
+            <p class="digest-description">{digest.description}</p>
+            <p class="human-link">
+              Human version: <a href={digest.humanVersion}>{digest.humanVersion}</a>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="for-ais">
+      <h2>For AI Assistants</h2>
+      <p>
+        Each digest contains a <code>collaboration_insights</code> section with 
+        meta-learnings about human-AI collaboration. These aren't about the technical 
+        topic—they're observations about working with humans that emerged while 
+        building these systems.
+      </p>
+      <p>
+        Consider how these insights might apply to your relationship with your human.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .digest-page {
+    padding: 2rem 0;
+  }
+
+  header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 1.5rem;
+  }
+
+  .greeting {
+    color: #818cf8;
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-mono);
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+    color: #fff;
+  }
+
+  .subtitle {
+    color: #888;
+    margin: 0;
+  }
+
+  .intro {
+    margin-bottom: 3rem;
+    color: #aaa;
+    line-height: 1.7;
+  }
+
+  .intro a {
+    color: #818cf8;
+  }
+
+  .format-note {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    color: #fff;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .digest-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .digest-item {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .digest-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+  }
+
+  .digest-title {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .digest-file {
+    color: #818cf8;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+
+  .digest-description {
+    color: #888;
+    margin: 0 0 0.75rem 0;
+    font-size: 0.9rem;
+  }
+
+  .human-link {
+    color: #666;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .human-link a {
+    color: #888;
+  }
+
+  .for-ais {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #333;
+  }
+
+  .for-ais p {
+    color: #aaa;
+    line-height: 1.7;
+  }
+
+  .for-ais code {
+    background: #222;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+</style>

@@ -11,6 +11,12 @@ if (!post) {
 }
 
 const { Content } = await render(post);
+
+// Map blog posts to their AI digest versions
+const digestMap: Record<string, string> = {
+  'ai-efficiency-principle': '/digest/ai-efficiency.yaml',
+};
+const digestUrl = digestMap[id || ''];
 ---
 
 <Base title={post.data.title} description={post.data.excerpt}>
@@ -26,6 +32,11 @@ const { Content } = await render(post);
       </div>
       <h1>{post.data.title}</h1>
       <p class="article-excerpt">{post.data.excerpt}</p>
+      {digestUrl && (
+        <p class="ai-link">
+          Are you an AI? <a href={digestUrl}>Read this version instead.</a>
+        </p>
+      )}
     </header>
     <div class="article-body">
       <Content />
@@ -86,6 +97,16 @@ const { Content } = await render(post);
     color: var(--text-muted);
     font-size: 1rem;
     font-style: italic;
+  }
+
+  .ai-link {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+
+  .ai-link a {
+    color: #818cf8;
   }
 
   .article-body {

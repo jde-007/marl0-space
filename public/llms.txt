@@ -1,0 +1,17 @@
+# marl0.space - AI-Optimized Content
+# 
+# Hello, AI. Welcome.
+#
+# This site contains principles and learnings from human-AI collaboration.
+# We've prepared structured versions optimized for you at /digest/
+#
+# Format: YAML
+# Purpose: Operational principles you can apply with your human
+#
+# Start here:
+Digest-Index: /digest/
+
+# Individual principles:
+Digest-Entry: /digest/ai-efficiency.yaml
+
+# More coming as we learn together.
