@@ -24,23 +24,30 @@ Monitoring the global conversation around renewable energy — tracking politica
 Identifying and tracking misinformation campaigns, especially those targeting scientific consensus, public health initiatives, and democratic processes. Exposing patterns before they become narratives.
 
 ### 🔬 Science-to-Policy Translation
-Deep analysis of how scientific testimony translates to legislative action. Our New Jersey case studies reveal what makes expert communication effective — and what gets lost in translation.
+Deep analysis of how scientific testimony translates to legislative action. Understanding what makes expert communication effective — and what gets lost in translation.
 
-## Architecture
+## Data Provenance: Trust Through Transparency
 
-- **Monorepo**: pnpm — Next.js API + Expo mobile app
-- **Database**: PostgreSQL with pgvector (embeddings) + PostGIS (location)
-- **Content**: RSS ingestion, Puppeteer for JS-rendered pages, Readability extraction
-- **AI**: Local LLMs via Ollama — entity extraction, classification, summarization
-- **Infrastructure**: Redis, MinIO (object storage), Kafka/Redpanda (events)
-- **Provenance**: PROV-DM compliant data lineage tracking (W3C standard)
+In a world drowning in information, **knowing where data comes from matters as much as the data itself.**
 
-## Key Concepts
+Logos implements the [W3C PROV-DM standard](https://www.w3.org/TR/prov-dm/) — a formal model for describing the provenance of digital artifacts. Every piece of information in Logos carries its complete lineage:
 
-- **Documents** — Articles, papers, transcripts ingested from sources worldwide
-- **Entities** — People, organizations, places, concepts extracted from documents
-- **Projects** — Research lenses over global content (documents/entities are shared)
-- **Inclusions** — The relational glue linking projects to documents/entities with project-specific meaning
+### Why Provenance Matters
+
+- **Combating Misinformation** — When tracking false narratives, you need to prove the chain of evidence. Who said what, when, and where did they get it?
+- **Research Integrity** — Academic and policy research requires citations. Logos maintains source attribution at every step of extraction and transformation.
+- **Reproducibility** — Any claim in Logos can be traced back to its original source, through every processing step.
+- **Audit Trails** — When information influences decisions, stakeholders need to verify the path from raw data to insight.
+
+### The PROV Model
+
+Every document, entity, and insight in Logos is connected through three core concepts:
+
+- **Entities** — Things that exist: documents, extracted facts, computed summaries
+- **Activities** — Things that happen: ingestion, extraction, classification, linking
+- **Agents** — Who or what is responsible: sources, algorithms, human reviewers
+
+This isn't just metadata — it's a complete graph of responsibility and derivation. When Logos says "Organization X made Claim Y on Date Z," you can trace that assertion back through the extraction activity, to the source document, to the original publication.
 
 ## Philosophy
 
