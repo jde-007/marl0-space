@@ -63,7 +63,7 @@ Total cloud API spend on classification for 1,300+ places: **$0**.
 
 ### 3. Do we need a frontier model?
 
-Some tasks genuinely require Claude or GPT-4 level reasoning:
+Some tasks genuinely require Claude Opus-level reasoning:
 
 - **Novel problem-solving**: Tasks we haven't systematized yet
 - **Nuanced writing**: Blog posts, documentation, communication
@@ -139,7 +139,7 @@ But we treat AI like we treat any other tool: right tool for the job.
 
 You wouldn't use a CNC mill to cut a sandwich in half. You wouldn't use a database to store a single boolean. You wouldn't rent a crane to hang a picture frame.
 
-So why use a 70B parameter model to check if a string contains an email address?
+So why use a frontier model to check if a string contains an email address?
 
 ## The Emerging System
 
