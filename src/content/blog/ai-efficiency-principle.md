@@ -82,6 +82,14 @@ Some tasks genuinely require Claude Opus-level reasoning:
 
 These get the big models. But they're the exception, not the default.
 
+### 4. Flag for human review
+
+When even the frontier model isn't confident, or when the decision requires taste, judgment, or domain expertise that no model can replicate: flag it for a human.
+
+These systems do not take the place of human taste. Where we can't rely on them to make a decision that will delight our customers, we happily create queues for people with passion, conviction, and opinions to weigh in.
+
+The ladder has a top, and a human is standing on it.
+
 ## The Molting Process
 
 Here's what we've discovered: **AI is for exploration, code is for implementation.**
@@ -98,6 +106,7 @@ Once we understand the problem's shape, we *molt*. We shed the AI layer and repl
 4. **Iterate until confidence is high.** Keep refining until the model handles the known cases reliably. The prompt becomes a detailed specification of what we actually want.
 5. **Extract the logic into code.** Now that we understand the rules (because we wrote them into the prompt), translate them into code. Deterministic. Fast. Free.
 6. **Keep an ELSE for the edge cases.** If the code doesn't match a known pattern, fall back to the prompt. The AI handles the genuinely ambiguous cases; code handles everything else.
+7. **Flag for human review.** When even the AI isn't confident, create a queue. These systems do not replace human taste. Where we can't rely on them to make a decision that will delight our customers, we happily create queues for people with passion, conviction, and opinions to weigh in.
 
 The idea metamorphosizes within the cocoon of the AI prompt. We feed it examples, constraints, corrections. It teaches us what the rules actually are by forcing us to articulate them. Then it emerges with beauty and power back into the world of code.
 
@@ -136,13 +145,13 @@ Let's make this concrete.
 
 **Scenario**: Classify 10,000 places by category and vibe.
 
-| Approach | Cost | Time | Reliability |
-|----------|------|------|-------------|
-| Claude API (Opus) | ~$150 | Hours (rate limits) | High, but variable |
-| Claude API (Haiku) | ~$15 | Hours (rate limits) | Medium |
-| Local 32B model | $0 (electricity) | ~12 hours | High with good prompts |
-| Local 7B model | $0 (electricity) | ~4 hours | Good for simple tasks |
-| Hybrid (7B + rules) | $0 (electricity) | ~2 hours | High |
+| Approach | Cost | Time |
+|----------|------|------|
+| Claude API (Opus) | ~$150 | Hours (rate limits) |
+| Claude API (Haiku) | ~$15 | Hours (rate limits) |
+| Local 32B model | $0 (electricity) | ~12 hours |
+| Local 7B model | $0 (electricity) | ~4 hours |
+| Hybrid (7B + rules) | $0 (electricity) | ~2 hours |
 
 The hybrid approach (small model for genuinely ambiguous cases, rules for everything else) is 75x cheaper than Opus, faster than any API approach, and more reliable because most decisions are deterministic.
 
@@ -166,9 +175,10 @@ What we're building is a system that:
 2. **Observes patterns** in what the AI does well and poorly.
 3. **Extracts rules** from those patterns. Deterministic, fast, free.
 4. **Reserves AI** for the genuinely ambiguous cases that need reasoning.
-5. **Keeps molting**. Every week the system gets lighter.
+5. **Flags for human review** when confidence is low. These systems do not replace human taste.
+6. **Keeps molting**. Every week the system gets lighter.
 
-The goal isn't to eliminate AI. It's to let AI handle what only AI can handle, and let everything else be fast, cheap, and predictable.
+The goal is to discover the highest leverage uses of AI, and the most intimate way to embed it into traditional programming techniques.
 
 The system is alive. It's learning. And it's learning to need less.
 
