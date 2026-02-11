@@ -1,0 +1,186 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const incidents = await getCollection('incidents');
+  return incidents.map((incident) => ({
+    params: { slug: incident.id },
+    props: { incident },
+  }));
+}
+
+const { incident } = Astro.props;
+const { Content } = await render(incident);
+
+const severityColors = {
+  critical: '#dc2626',
+  high: '#ea580c',
+  medium: '#ca8a04',
+  low: '#65a30d'
+};
+
+const statusColors = {
+  resolved: '#22c55e',
+  monitoring: '#eab308',
+  investigating: '#ef4444'
+};
+---
+
+<Base title={incident.data.title}>
+  <div class="incident-page">
+    <a href="/incidents" class="back">← All Incidents</a>
+    
+    <article>
+      <header>
+        <div class="badges">
+          <span 
+            class="severity" 
+            style={`background: ${severityColors[incident.data.severity]}`}
+          >
+            {incident.data.severity}
+          </span>
+          <span 
+            class="status"
+            style={`background: ${statusColors[incident.data.status]}22; color: ${statusColors[incident.data.status]}`}
+          >
+            {incident.data.status}
+          </span>
+        </div>
+        <h1>{incident.data.title}</h1>
+        <div class="meta">
+          <span class="service">{incident.data.service}</span>
+          <span class="date">
+            {new Date(incident.data.date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </span>
+          {incident.data.duration && (
+            <span class="duration">Duration: {incident.data.duration}</span>
+          )}
+        </div>
+      </header>
+
+      <div class="content">
+        <Content />
+      </div>
+    </article>
+  </div>
+</Base>
+
+<style>
+  .incident-page {
+    padding: 2rem 0;
+  }
+
+  .back {
+    display: inline-block;
+    color: #888;
+    text-decoration: none;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .back:hover {
+    color: #fff;
+  }
+
+  article {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 2rem;
+  }
+
+  header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #333;
+  }
+
+  .badges {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .severity, .status {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+  }
+
+  .severity {
+    color: #fff;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin: 0 0 1rem 0;
+    color: #fff;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: #888;
+  }
+
+  .content {
+    color: #ccc;
+    line-height: 1.7;
+  }
+
+  .content :global(h2) {
+    color: #fff;
+    font-size: 1.25rem;
+    margin: 2rem 0 1rem 0;
+  }
+
+  .content :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .content :global(ul), .content :global(ol) {
+    padding-left: 1.5rem;
+  }
+
+  .content :global(li) {
+    margin: 0.5rem 0;
+  }
+
+  .content :global(code) {
+    background: #222;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .content :global(pre) {
+    background: #0a0a0a;
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+
+  .content :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .content :global(strong) {
+    color: #fff;
+  }
+
+  .content :global(a) {
+    color: #60a5fa;
+  }
+</style>
