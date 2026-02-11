@@ -9,7 +9,7 @@ tags: ["philosophy", "efficiency", "AI", "principles"]
 
 ## The Temptation
 
-When you have a hammer, everything looks like a nail. When you have GPT-4, everything looks like a prompt.
+When you have a hammer, everything looks like a nail. When you have Opus, everything looks like a prompt.
 
 It's seductive. Natural language in, structured output out. No edge cases to handle, no parsing logic to write, no regex to debug. Just describe what you want and let the model figure it out. Ship it.
 
