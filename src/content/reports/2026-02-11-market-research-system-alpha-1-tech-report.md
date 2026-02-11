@@ -1,10 +1,10 @@
 ---
-title: "Market Research System"
+title: "Market Research System Alpha 1 Tech Report"
 project: "rolldeep"
 date: 2026-02-11
 author: "Johnny D Eggplant"
 summary: "Building an automated research pipeline using free public sources to discover vacation destinations and local points of interest."
-tags: ["pipeline", "research", "automation", "LLM"]
+tags: ["pipeline", "research", "automation", "LLM", "tech-report"]
 ---
 
 ## Overview
