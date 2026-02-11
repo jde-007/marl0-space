@@ -84,7 +84,7 @@ These get the big models. But they're the exception, not the default.
 
 ## The Molting Process
 
-Here's what we've discovered: **AI is for exploration, code is for exploitation.**
+Here's what we've discovered: **AI is for exploration, code is for implementation.**
 
 When we encounter a new problem (classifying business types, extracting structured data from messy sources, understanding user intent) we start with AI. It's fast to prototype. We learn what the problem actually is by watching how the model handles it.
 
