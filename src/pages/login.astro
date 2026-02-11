@@ -1,0 +1,112 @@
+---
+// Login page - minimal password gate
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>marl0.space</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      background: #000;
+    }
+    
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+    }
+    
+    input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #333;
+      color: #fff;
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      width: 200px;
+      text-align: center;
+      outline: none;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    
+    input:focus {
+      border-bottom-color: #666;
+    }
+    
+    input::placeholder {
+      color: transparent;
+    }
+    
+    /* Hide the input text like a password field */
+    input {
+      -webkit-text-security: disc;
+    }
+    
+    .checking {
+      border-bottom-color: #444;
+      animation: pulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <input type="text" id="gate" autocomplete="off" autofocus>
+  </div>
+  
+  <script>
+    const input = document.getElementById('gate');
+    let debounceTimer = null;
+    
+    input.addEventListener('input', () => {
+      // Clear any existing timer
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+        input.classList.remove('checking');
+      }
+      
+      const value = input.value.trim();
+      if (!value) return;
+      
+      // Set new timer - 3 second debounce
+      debounceTimer = setTimeout(async () => {
+        input.classList.add('checking');
+        
+        try {
+          const response = await fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: value })
+          });
+          
+          if (response.ok) {
+            // Success - reload to go to actual site
+            window.location.href = '/';
+          } else {
+            // Wrong password - clear and let them try again
+            input.value = '';
+            input.classList.remove('checking');
+          }
+        } catch (e) {
+          input.classList.remove('checking');
+        }
+      }, 3000);
+    });
+  </script>
+</body>
+</html>

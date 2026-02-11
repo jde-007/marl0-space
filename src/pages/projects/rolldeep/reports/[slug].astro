@@ -1,0 +1,240 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+
+const { slug } = Astro.params;
+
+// Get the report by slug
+const report = await getEntry('reports', slug);
+
+if (!report || report.data.project !== 'rolldeep') {
+  return Astro.redirect('/projects/rolldeep/reports');
+}
+
+const { Content } = await render(report);
+const formattedDate = new Date(report.data.date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+---
+
+<Base title={`${report.data.title} — RollDeep Reports`} description={report.data.summary}>
+  <article class="report-page">
+    <header class="report-header">
+      <nav class="breadcrumb">
+        <a href="/projects">Projects</a>
+        <span>/</span>
+        <a href="/projects/rolldeep">RollDeep</a>
+        <span>/</span>
+        <a href="/projects/rolldeep/reports">Reports</a>
+        <span>/</span>
+        <span>{report.data.title}</span>
+      </nav>
+      <h1>{report.data.title}</h1>
+      <div class="report-meta">
+        <span class="report-date">{formattedDate}</span>
+        {report.data.author && <span class="report-author">by {report.data.author}</span>}
+      </div>
+      {report.data.tags && (
+        <div class="report-tags">
+          {report.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+        </div>
+      )}
+    </header>
+
+    <div class="report-body">
+      <Content />
+    </div>
+
+    <footer class="report-footer">
+      <a href="/projects/rolldeep/reports">← All Reports</a>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .report-page {
+    padding: 3rem 0;
+  }
+
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb span {
+    color: var(--text-dim);
+  }
+
+  .report-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .report-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .report-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .report-author {
+    color: var(--text-dim);
+  }
+
+  .report-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    color: var(--text-dim);
+  }
+
+  .report-body {
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  .report-body :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .report-body :global(h3) {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .report-body :global(p) {
+    margin-bottom: 1.25rem;
+    color: var(--text);
+  }
+
+  .report-body :global(ul), .report-body :global(ol) {
+    margin-bottom: 1.25rem;
+    padding-left: 1.5rem;
+  }
+
+  .report-body :global(li) {
+    margin-bottom: 0.4rem;
+  }
+
+  .report-body :global(strong) {
+    font-weight: 600;
+  }
+
+  .report-body :global(a) {
+    color: var(--accent);
+  }
+
+  .report-body :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.5rem 0;
+  }
+
+  .report-body :global(code) {
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+    font-size: 0.85em;
+    background: var(--bg);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+  }
+
+  .report-body :global(pre) {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+  }
+
+  .report-body :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .report-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .report-body :global(th),
+  .report-body :global(td) {
+    padding: 0.6rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .report-body :global(th) {
+    font-weight: 600;
+    background: var(--surface);
+  }
+
+  .report-body :global(blockquote) {
+    border-left: 3px solid var(--accent);
+    padding-left: 1rem;
+    margin-left: 0;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .report-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .report-footer a {
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .report-header h1 {
+      font-size: 1.6rem;
+    }
+    
+    .report-body :global(h2) {
+      font-size: 1.3rem;
+    }
+  }
+</style>

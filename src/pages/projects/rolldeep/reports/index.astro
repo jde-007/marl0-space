@@ -1,0 +1,171 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const allReports = await getCollection('reports');
+const rolldeepReports = allReports
+  .filter((r) => r.data.project === 'rolldeep')
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<Base title="Intelligence Reports — RollDeep" description="Technical reports from the RollDeep Intelligence pipeline.">
+  <article class="reports-page">
+    <header class="reports-header">
+      <nav class="breadcrumb">
+        <a href="/projects">Projects</a>
+        <span>/</span>
+        <a href="/projects/rolldeep">RollDeep</a>
+        <span>/</span>
+        <span>Reports</span>
+      </nav>
+      <h1>📊 Intelligence Reports</h1>
+      <p class="reports-subtitle">Technical deep-dives into the RollDeep data pipeline — what we built, what we learned, what broke.</p>
+    </header>
+
+    <section class="reports-list">
+      {rolldeepReports.length === 0 ? (
+        <p class="no-reports">No reports yet. Check back soon.</p>
+      ) : (
+        rolldeepReports.map((report) => (
+          <a href={`/projects/rolldeep/reports/${report.id}`} class="report-card">
+            <div class="report-date">{new Date(report.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</div>
+            <h2 class="report-title">{report.data.title}</h2>
+            <p class="report-summary">{report.data.summary}</p>
+            {report.data.tags && (
+              <div class="report-tags">
+                {report.data.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+              </div>
+            )}
+          </a>
+        ))
+      )}
+    </section>
+
+    <footer class="reports-footer">
+      <a href="/projects/rolldeep">← Back to RollDeep</a>
+    </footer>
+  </article>
+</Base>
+
+<style>
+  .reports-page {
+    padding: 3rem 0;
+  }
+
+  .breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumb a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb span {
+    color: var(--text-dim);
+  }
+
+  .reports-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .reports-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .reports-subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .reports-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .report-card {
+    display: block;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .report-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .report-date {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .report-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .report-summary {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .report-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--bg);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    color: var(--text-dim);
+  }
+
+  .no-reports {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .reports-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .reports-footer a {
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    .reports-header h1 {
+      font-size: 1.6rem;
+    }
+  }
+</style>
