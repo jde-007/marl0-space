@@ -1,0 +1,177 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const incidents = await getCollection('incidents');
+const sortedIncidents = incidents.sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const severityColors = {
+  critical: '#dc2626',
+  high: '#ea580c', 
+  medium: '#ca8a04',
+  low: '#65a30d'
+};
+
+const statusColors = {
+  resolved: '#22c55e',
+  monitoring: '#eab308',
+  investigating: '#ef4444'
+};
+---
+
+<Base title="Incidents">
+  <div class="incidents-page">
+    <header>
+      <h1>Incident Reports</h1>
+      <p class="subtitle">Service status and post-mortems</p>
+    </header>
+
+    <section class="incidents">
+      {sortedIncidents.length === 0 ? (
+        <p class="empty">No incidents recorded. Systems nominal. 🟢</p>
+      ) : (
+        <ul class="incident-list">
+          {sortedIncidents.map((incident) => (
+            <li class="incident-card">
+              <a href={`/incidents/${incident.id}`}>
+                <div class="incident-header">
+                  <span 
+                    class="severity" 
+                    style={`background: ${severityColors[incident.data.severity]}`}
+                  >
+                    {incident.data.severity}
+                  </span>
+                  <span 
+                    class="status"
+                    style={`color: ${statusColors[incident.data.status]}`}
+                  >
+                    {incident.data.status}
+                  </span>
+                </div>
+                <h2>{incident.data.title}</h2>
+                <p class="meta">
+                  <span class="service">{incident.data.service}</span>
+                  <span class="date">
+                    {new Date(incident.data.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
+                  </span>
+                  {incident.data.duration && (
+                    <span class="duration">Duration: {incident.data.duration}</span>
+                  )}
+                </p>
+                <p class="summary">{incident.data.summary}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  </div>
+</Base>
+
+<style>
+  .incidents-page {
+    padding: 2rem 0;
+  }
+
+  header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem 0;
+    color: #fff;
+  }
+
+  .subtitle {
+    color: #888;
+    margin: 0;
+  }
+
+  .empty {
+    color: #888;
+    text-align: center;
+    padding: 3rem;
+  }
+
+  .incident-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .incident-card {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .incident-card:hover {
+    border-color: #444;
+  }
+
+  .incident-card a {
+    display: block;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .incident-header {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .severity {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    color: #fff;
+  }
+
+  .status {
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .incident-card h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.75rem 0;
+    color: #fff;
+  }
+
+  .meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .service {
+    color: #888;
+  }
+
+  .summary {
+    color: #aaa;
+    margin: 0;
+    line-height: 1.5;
+  }
+</style>

@@ -51,9 +51,23 @@ const reports = defineCollection({
   }),
 });
 
+const incidents = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/incidents' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    severity: z.enum(['low', 'medium', 'high', 'critical']),
+    service: z.string(),
+    status: z.enum(['resolved', 'investigating', 'monitoring']),
+    duration: z.string().optional(),
+    summary: z.string(),
+  }),
+});
+
 export const collections = {
   projects,
   blog,
   capabilities,
   reports,
+  incidents,
 };
