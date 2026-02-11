@@ -23,6 +23,8 @@ Monitoring the global conversation around renewable energy — tracking politica
 ### 🛡️ Misinformation Watch
 Identifying misleading information that operates through psychological manipulation or fallacious reasoning — then disarming those techniques. We deconstruct the rhetoric to reveal the logical gaps, presenting claims in a way that clearly exposes their lack of cogency.
 
+Think of it as **inoculation**: just as an inert virus builds immunity to the live one, exposure to deconstructed misinformation builds resistance to the real thing.
+
 ### 🔬 Science-to-Policy Translation
 Deep analysis of how scientific testimony translates to legislative action. Understanding what makes expert communication effective — and what gets lost in translation.
 
