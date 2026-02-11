@@ -26,29 +26,6 @@ Identifying and tracking misinformation campaigns, especially those targeting sc
 ### 🔬 Science-to-Policy Translation
 Deep analysis of how scientific testimony translates to legislative action. Our New Jersey case studies reveal what makes expert communication effective — and what gets lost in translation.
 
-## Featured Research: NJ Legislative Analysis
-
-Our ongoing study examines how scientists communicate with legislators, analyzing testimony transcripts to understand the mechanics of effective science communication.
-
-| Metric | Value |
-|--------|-------|
-| Scientific claims analyzed | 77+ |
-| Average evidence quality | 87% |
-| Legislative hearings studied | 4 |
-| Expert witnesses profiled | 12 |
-
-**Key findings:**
-- 80% of evidence quality gains come from prompt engineering (explicit negatives, reasoning fields)
-- NJ-specific data drives engagement more than national statistics
-- Economic framing ($5.8B FEMA claims, $1.3B Sandy savings) resonates with legislators
-- Scientists who frame findings as "likely ranges" with uncertainty are respected more
-
-### Hearings Analyzed
-- **Plastic Pollution (2024-04-22)** — 42 claims, 81% strong evidence
-- **Climate Resiliency (2024-08-01)** — 35 claims, 94% strong evidence
-- **Climate Insurance (2024-03-07)** — Policy-focused, fewer scientists
-- **Clean Energy (2024-03-11)** — Dr. Jesse Jenkins from Princeton ZERO Lab
-
 ## Architecture
 
 - **Monorepo**: pnpm — Next.js API + Expo mobile app
@@ -67,10 +44,7 @@ Our ongoing study examines how scientists communicate with legislators, analyzin
 
 ## Philosophy
 
-> "In the beginning was the Word, and the Word was with God, and the Word was God."
-> — John 1:1
-
-The ancient Greeks understood *logos* as the principle of reason and order underlying reality. We continue that tradition — tracking how language, properly deployed, becomes action and shapes the world.
+The ancient Greeks understood *logos* as the principle of reason and order underlying reality — the rational structure behind existence. We continue that tradition, tracking how language, properly deployed, becomes action and shapes the world.
 
 ---
 
