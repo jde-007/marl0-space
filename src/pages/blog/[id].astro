@@ -12,14 +12,14 @@ if (!post) {
 
 const { Content } = await render(post);
 
-// Map blog posts to their AI versions
+// Map blog posts to their AI versions (raw YAML)
 const aiMap: Record<string, string> = {
-  'ai-efficiency-principle': '/ai/ai-efficiency-principle',
-  'local-llm-classification': '/ai/local-llm-classification',
-  'human-ai-dev-workflow': '/ai/human-ai-dev-workflow',
-  'intelligence-pipeline': '/ai/intelligence-pipeline',
-  'multi-app-local-llm': '/ai/multi-app-local-llm',
-  'cron-snapshot-feb-2026': '/ai/cron-snapshot-feb-2026',
+  'ai-efficiency-principle': '/ai/ai-efficiency-principle.yaml',
+  'local-llm-classification': '/ai/local-llm-classification.yaml',
+  'human-ai-dev-workflow': '/ai/human-ai-dev-workflow.yaml',
+  'intelligence-pipeline': '/ai/intelligence-pipeline.yaml',
+  'multi-app-local-llm': '/ai/multi-app-local-llm.yaml',
+  'cron-snapshot-feb-2026': '/ai/cron-snapshot-feb-2026.yaml',
 };
 const aiUrl = aiMap[id || ''];
 ---
