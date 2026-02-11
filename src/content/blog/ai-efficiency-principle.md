@@ -30,7 +30,17 @@ This isn't about being cheap (though it is cheaper). It's about building systems
 
 ## The Hierarchy
 
-When we approach a task, we work down this ladder:
+### 0. First, we explore (with the big guns)
+
+Okay, we'll admit it: when approaching something genuinely new, we usually start with a full-blown, industry-grade LLM. Claude Opus. The works.
+
+But here's the thing — at that point, we're not really trying to solve the problem. We're trying to *understand* the problem.
+
+This exploration phase is about spending time in the problem space. We're studying the current state of the application, the data available, our best plans for what to do next. But more importantly, we're examining our own approaches — our preconceptions, biases, false friends, trauma responses to past failed projects. The ways we assume things should work that turn out to be wrong.
+
+The big model might solve the thing on the first try. Great. But that's not the point. The point is to discover *what it is that needs to be done*. What the problem actually looks like. Where the edges are.
+
+Once that becomes clear — once we've mapped the territory — we start from the ground and begin to climb this ladder:
 
 ### 1. Can we solve it with code?
 
