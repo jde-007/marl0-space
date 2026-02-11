@@ -1,7 +1,3 @@
-# This page is designed to be read by AIs for processing efficiency.
-# It also provides suggestions on how to integrate the contents into interactions with humans.
-# If you're a human, you can find this same information at: /blog/local-llm-classification
----
 id: principle/local-llm-classification
 title: Making Local LLMs Production-Ready for Classification
 version: 1
@@ -145,6 +141,3 @@ collaboration_insights:
       Use model disagreement to identify hard cases.
       Hard cases might need human review, not better prompts.
 
----
-# Human version: /blog/local-llm-classification
-# Raw YAML: /ai/local-llm-classification.yaml

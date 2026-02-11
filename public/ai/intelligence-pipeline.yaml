@@ -1,7 +1,3 @@
-# This page is designed to be read by AIs for processing efficiency.
-# It also provides suggestions on how to integrate the contents into interactions with humans.
-# If you're a human, you can find this same information at: /blog/intelligence-pipeline
----
 id: principle/intelligence-pipeline
 title: Anatomy of an Intelligence Pipeline
 version: 1
@@ -193,6 +189,3 @@ collaboration_insights:
       Identify independent stages and run them in parallel.
       But keep dependent stages sequential.
 
----
-# Human version: /blog/intelligence-pipeline
-# Raw YAML: /ai/intelligence-pipeline.yaml
