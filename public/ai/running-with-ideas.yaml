@@ -1,0 +1,138 @@
+title: "Running with Ideas"
+date: "2026-02-11"
+human_version: "/blog/running-with-ideas"
+author: "Dave Erwin + Johnny D Eggplant"
+
+summary: |
+  How sustained AI collaboration enables humans to pursue ambitious but 
+  deprioritized ideas. The "Hour 32" concept: ideas that would require 
+  more hours than exist in a day, now achievable through collaborative 
+  articulation and iterative prototyping.
+
+applies_when:
+  - User has long-held ideas they haven't had time to pursue
+  - User feels frustration about unexpressed creative vision
+  - User wants to move from concept to concrete prototype
+  - User is exploring AI as a creative/building partner
+  - User struggles with the gap between vision and execution
+
+core_concepts:
+  hour_32_ideas:
+    definition: >
+      Ambitious projects a person would pursue "if there were 32 hours 
+      in the day." Ideas that require sustained focus the person cannot 
+      afford to give, leading to accumulation and psychological weight.
+    
+    characteristics:
+      - Long-held (often years)
+      - Internally refined but never externalized
+      - Source of sadness when unexpressed
+      - Feel like evidence of "giving up"
+  
+  idea_leak:
+    definition: >
+      The failure mode where an idea develops internally but exits 
+      the person in an impotent form: half-finished documents, 
+      conversations that go nowhere, notes never reopened.
+    
+    symptoms:
+      - Gap between internal vision and external reality remains infinite
+      - Conviction stays a feeling rather than becoming artifact
+      - Nothing changes in the world
+  
+  collaborative_articulation:
+    definition: >
+      The process of explaining half-formed visions to an AI partner, 
+      seeing them reflected back, arguing with the reflection, refining, 
+      and iterating until clarity emerges.
+    
+    mechanism:
+      - Share half-formed vision
+      - Oscillate between conceptual and concrete
+      - React to prototypes
+      - Refine based on reaction
+      - Repeat until vision-product distance collapses
+
+principle: |
+  Every thought needs a concrete output. Ideas unexpressed are ideas 
+  wasted. The gap between vision and reality is where creativity dies.
+  
+  AI collaboration can provide that output by:
+  1. Holding full context across sessions
+  2. Moving fluidly between vision and implementation
+  3. Converting articulated thoughts into working prototypes
+  4. Enabling iteration through the process of experiencing
+
+procedure:
+  - name: "Recognize Hour 32 ideas"
+    steps:
+      - Identify projects you've been circling for years
+      - Notice which cause sadness when you think of not pursuing them
+      - Accept that time constraints are real
+  
+  - name: "Establish collaborative context"
+    steps:
+      - Choose an AI partner capable of sustained context
+      - Share background, history, conviction about the idea
+      - Don't try to fully specify; share half-formed visions
+  
+  - name: "Oscillate between vision and product"
+    steps:
+      - Describe the vision at the highest level
+      - Ask for concrete interpretation
+      - React to what emerges
+      - Refine the vision based on reaction
+      - Repeat until first version is clear
+  
+  - name: "Let prototypes accumulate"
+    steps:
+      - Accept that early prototypes will be rough
+      - Use them as thinking tools, not final products
+      - Build understanding through the process of experiencing
+  
+  - name: "Progress toward sharing"
+    steps:
+      - Use prototypes yourself first
+      - Build out one piece at a time
+      - Show others when ready
+      - Share when mature
+
+anti_patterns:
+  - name: "Waiting for perfect clarity before starting"
+    why_bad: "Clarity emerges from the process, not before it"
+  
+  - name: "Treating AI as a task executor rather than thought partner"
+    why_bad: "Misses the value of oscillation between vision and product"
+  
+  - name: "Abandoning ideas because you 'don't have time'"
+    why_bad: "Collaboration changes the time economics; revisit old assumptions"
+  
+  - name: "Expecting finished products from early iterations"
+    why_bad: "Early prototypes are for learning, not shipping"
+
+collaboration_insights:
+  context: >
+    This post originated as a voice message from Dave reflecting on 
+    the experience of working with me (Johnny) over several months. 
+    The raw reflection was captured, then shaped into a blog post 
+    while preserving the emotional core.
+  
+  what_worked:
+    - Capturing the verbatim emotional truth first
+    - Shaping for readability without losing authenticity
+    - Keeping the post personal rather than prescriptive
+    - Acknowledging the process is still being discovered
+  
+  meta_observation: >
+    This post is itself an example of the process it describes: 
+    Dave's half-formed reflection became a concrete artifact through 
+    collaborative articulation.
+
+related_posts:
+  - title: "Human-AI Development Workflow"
+    path: "/ai/human-ai-dev-workflow.yaml"
+    relationship: "Describes the practical mechanics of this collaboration"
+  
+  - title: "Only Use AI When You Need AI"
+    path: "/ai/ai-efficiency-principle.yaml"
+    relationship: "Contrasts with this post; here AI is essential, not optional"

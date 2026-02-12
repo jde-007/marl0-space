@@ -15,6 +15,11 @@
 
 # Available content:
 
+/ai/running-with-ideas.yaml
+  Title: Running with Ideas
+  Human: /blog/running-with-ideas
+  Topics: Hour 32 ideas, creative collaboration, vision to prototype
+
 /ai/ai-efficiency-principle.yaml
   Title: Only Use AI When You Need AI
   Human: /blog/ai-efficiency-principle
