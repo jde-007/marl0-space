@@ -3,7 +3,11 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "node server.mjs",
+    "dev:direct": "astro dev",
+    "start": "node server.mjs --production",
+    "start:kill": "node server.mjs --production --kill",
+    "dev:kill": "node server.mjs --kill",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
