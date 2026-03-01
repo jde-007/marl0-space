@@ -1,0 +1,209 @@
+---
+// The most important page on the internet
+---
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Button</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    
+    .container {
+      text-align: center;
+    }
+    
+    h1 {
+      color: #fff;
+      margin-bottom: 2rem;
+      font-size: 1.5rem;
+      opacity: 0.7;
+    }
+    
+    #fart-button {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(145deg, #e74c3c, #c0392b);
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 
+        0 10px 30px rgba(0,0,0,0.3),
+        inset 0 -5px 20px rgba(0,0,0,0.2),
+        inset 0 5px 20px rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    #fart-button:hover {
+      transform: scale(1.05);
+      box-shadow: 
+        0 15px 40px rgba(0,0,0,0.4),
+        inset 0 -5px 20px rgba(0,0,0,0.2),
+        inset 0 5px 20px rgba(255,255,255,0.1);
+    }
+    
+    #fart-button:active {
+      transform: scale(0.95);
+    }
+    
+    #fart-button.activated {
+      background: linear-gradient(145deg, #8B4513, #5D3A1A);
+      box-shadow: 
+        0 10px 30px rgba(139, 69, 19, 0.4),
+        inset 0 -5px 20px rgba(0,0,0,0.3),
+        inset 0 5px 20px rgba(255,255,255,0.05);
+    }
+    
+    .stink-lines {
+      position: fixed;
+      pointer-events: none;
+      font-size: 3rem;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    
+    .stink-lines.visible {
+      opacity: 1;
+      animation: float 2s ease-out forwards;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(20deg);
+        opacity: 0;
+      }
+    }
+    
+    #counter {
+      color: #fff;
+      margin-top: 2rem;
+      font-size: 1rem;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Do Not Press</h1>
+    <button id="fart-button">PRESS</button>
+    <p id="counter">Pressed: 0 times</p>
+  </div>
+  
+  <script>
+    let pressCount = 0;
+    let audioContext = null;
+    
+    function initAudio() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioContext;
+    }
+    
+    function playFart() {
+      const ctx = initAudio();
+      const now = ctx.currentTime;
+      
+      // Create noise buffer for texture
+      const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.8, ctx.sampleRate);
+      const noiseData = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < noiseBuffer.length; i++) {
+        noiseData[i] = Math.random() * 2 - 1;
+      }
+      
+      // Noise source
+      const noise = ctx.createBufferSource();
+      noise.buffer = noiseBuffer;
+      
+      // Filter for the noise
+      const noiseFilter = ctx.createBiquadFilter();
+      noiseFilter.type = 'lowpass';
+      noiseFilter.frequency.setValueAtTime(150, now);
+      noiseFilter.frequency.exponentialRampToValueAtTime(80, now + 0.5);
+      
+      // Noise gain
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.3, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+      
+      // Main oscillator for the bass
+      const osc = ctx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(80, now);
+      osc.frequency.exponentialRampToValueAtTime(40, now + 0.3);
+      osc.frequency.exponentialRampToValueAtTime(60, now + 0.5);
+      osc.frequency.exponentialRampToValueAtTime(30, now + 0.7);
+      
+      // Oscillator gain
+      const oscGain = ctx.createGain();
+      oscGain.gain.setValueAtTime(0.4, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.7);
+      
+      // Connect noise path
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+      
+      // Connect oscillator path  
+      osc.connect(oscGain);
+      oscGain.connect(ctx.destination);
+      
+      // Play
+      noise.start(now);
+      noise.stop(now + 0.8);
+      osc.start(now);
+      osc.stop(now + 0.8);
+    }
+    
+    function createStinkLines(x, y) {
+      const emojis = ['💨', '💩', '🤢', '😵', '☁️'];
+      for (let i = 0; i < 5; i++) {
+        const stink = document.createElement('div');
+        stink.className = 'stink-lines';
+        stink.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        stink.style.left = (x + (Math.random() - 0.5) * 200) + 'px';
+        stink.style.top = (y + (Math.random() - 0.5) * 100) + 'px';
+        document.body.appendChild(stink);
+        
+        setTimeout(() => stink.classList.add('visible'), 10);
+        setTimeout(() => stink.remove(), 2000);
+      }
+    }
+    
+    const button = document.getElementById('fart-button');
+    const counter = document.getElementById('counter');
+    
+    button.addEventListener('click', (e) => {
+      playFart();
+      button.classList.add('activated');
+      pressCount++;
+      counter.textContent = `Pressed: ${pressCount} time${pressCount === 1 ? '' : 's'}`;
+      
+      const rect = button.getBoundingClientRect();
+      createStinkLines(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    });
+  </script>
+</body>
+</html>

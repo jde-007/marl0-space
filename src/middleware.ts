@@ -6,8 +6,8 @@ const COOKIE_VALUE = 'authenticated';
 export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
   
-  // Allow login page and auth API
-  if (pathname === '/login' || pathname === '/api/auth') {
+  // Allow login page, auth API, and public pages
+  if (pathname === '/login' || pathname === '/api/auth' || pathname === '/fart') {
     return next();
   }
   
