@@ -177,6 +177,72 @@
       osc.stop(now + 0.8);
     }
     
+    function playSigh() {
+      const ctx = initAudio();
+      const now = ctx.currentTime;
+      
+      // Breathy noise component
+      const sighBuffer = ctx.createBuffer(1, ctx.sampleRate * 1.5, ctx.sampleRate);
+      const sighData = sighBuffer.getChannelData(0);
+      for (let i = 0; i < sighBuffer.length; i++) {
+        sighData[i] = Math.random() * 2 - 1;
+      }
+      
+      const breathNoise = ctx.createBufferSource();
+      breathNoise.buffer = sighBuffer;
+      
+      // Bandpass filter for breathy quality
+      const breathFilter = ctx.createBiquadFilter();
+      breathFilter.type = 'bandpass';
+      breathFilter.frequency.setValueAtTime(800, now);
+      breathFilter.frequency.exponentialRampToValueAtTime(400, now + 1.2);
+      breathFilter.Q.value = 1;
+      
+      const breathGain = ctx.createGain();
+      breathGain.gain.setValueAtTime(0, now);
+      breathGain.gain.linearRampToValueAtTime(0.15, now + 0.1);
+      breathGain.gain.linearRampToValueAtTime(0.1, now + 0.8);
+      breathGain.gain.exponentialRampToValueAtTime(0.01, now + 1.3);
+      
+      // Vocal tone - descending "ahhh"
+      const voice = ctx.createOscillator();
+      voice.type = 'sine';
+      voice.frequency.setValueAtTime(220, now);
+      voice.frequency.exponentialRampToValueAtTime(150, now + 0.6);
+      voice.frequency.exponentialRampToValueAtTime(120, now + 1.2);
+      
+      // Add slight vibrato
+      const vibrato = ctx.createOscillator();
+      vibrato.frequency.value = 5;
+      const vibratoGain = ctx.createGain();
+      vibratoGain.gain.value = 3;
+      vibrato.connect(vibratoGain);
+      vibratoGain.connect(voice.frequency);
+      
+      const voiceGain = ctx.createGain();
+      voiceGain.gain.setValueAtTime(0, now);
+      voiceGain.gain.linearRampToValueAtTime(0.12, now + 0.1);
+      voiceGain.gain.linearRampToValueAtTime(0.08, now + 0.8);
+      voiceGain.gain.exponentialRampToValueAtTime(0.01, now + 1.3);
+      
+      // Connect breath path
+      breathNoise.connect(breathFilter);
+      breathFilter.connect(breathGain);
+      breathGain.connect(ctx.destination);
+      
+      // Connect voice path
+      voice.connect(voiceGain);
+      voiceGain.connect(ctx.destination);
+      
+      // Play
+      breathNoise.start(now);
+      breathNoise.stop(now + 1.4);
+      voice.start(now);
+      voice.stop(now + 1.4);
+      vibrato.start(now);
+      vibrato.stop(now + 1.4);
+    }
+    
     function createStinkLines(x, y) {
       const emojis = ['💨', '💩', '🤢', '😵', '☁️'];
       for (let i = 0; i < 5; i++) {
@@ -197,6 +263,9 @@
     
     button.addEventListener('click', (e) => {
       playFart();
+      // Sigh of relief after the fart
+      setTimeout(() => playSigh(), 800);
+      
       button.classList.add('activated');
       pressCount++;
       counter.textContent = `Pressed: ${pressCount} time${pressCount === 1 ? '' : 's'}`;
