@@ -1,0 +1,432 @@
+---
+// Storybook Generator - Create personalized children's stories
+---
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storybook Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-family: 'Bubblegum Sans', cursive;
+      color: white;
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+    }
+    
+    .form-card {
+      background: white;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      color: #4a4a4a;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    
+    .topics-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .topic-tag {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .topic-tag button {
+      background: rgba(255,255,255,0.3);
+      border: none;
+      color: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+    }
+    
+    .add-topic {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .add-topic input {
+      flex: 1;
+    }
+    
+    .add-topic button {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #11998e, #38ef7d);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .add-topic button:hover {
+      transform: scale(1.05);
+    }
+    
+    .generate-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Bubblegum Sans', cursive;
+      letter-spacing: 1px;
+    }
+    
+    .generate-btn:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 30px rgba(240, 147, 251, 0.4);
+    }
+    
+    .generate-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    /* Storybook Display */
+    .storybook {
+      display: none;
+      margin-top: 2rem;
+    }
+    
+    .storybook.visible {
+      display: block;
+    }
+    
+    .book-cover {
+      background: linear-gradient(145deg, #1a1a2e, #16213e);
+      border-radius: 24px;
+      padding: 3rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .book-cover h2 {
+      font-family: 'Bubblegum Sans', cursive;
+      color: #ffd700;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+    }
+    
+    .book-cover p {
+      color: rgba(255,255,255,0.8);
+      font-size: 1.2rem;
+    }
+    
+    .story-page {
+      background: #fffef5;
+      border-radius: 24px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 
+        0 20px 60px rgba(0,0,0,0.15),
+        inset 0 0 100px rgba(255,250,220,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .story-page::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.05), transparent);
+    }
+    
+    .page-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .page-text {
+      font-size: 1.4rem;
+      line-height: 1.8;
+      color: #2d2d2d;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .page-number {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-family: 'Bubblegum Sans', cursive;
+      color: #764ba2;
+      font-size: 1.2rem;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: white;
+    }
+    
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .new-story-btn {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: white;
+      color: #764ba2;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Bubblegum Sans', cursive;
+    }
+    
+    @media (max-width: 600px) {
+      body { padding: 1rem; }
+      h1 { font-size: 2rem; }
+      .form-card { padding: 1.5rem; }
+      .page-text { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>✨ Storybook Generator ✨</h1>
+    
+    <div class="form-card" id="form-section">
+      <div class="form-group">
+        <label for="childName">Child's Name</label>
+        <input type="text" id="childName" placeholder="Enter the hero's name..." />
+      </div>
+      
+      <div class="form-group">
+        <label for="childAge">Age</label>
+        <input type="number" id="childAge" min="1" max="12" placeholder="How old?" />
+      </div>
+      
+      <div class="form-group">
+        <label>Story Topics</label>
+        <div class="topics-container" id="topics-container"></div>
+        <div class="add-topic">
+          <input type="text" id="topicInput" placeholder="Add a topic (dragons, space, princess...)" />
+          <button type="button" id="addTopicBtn">+ Add</button>
+        </div>
+      </div>
+      
+      <button class="generate-btn" id="generateBtn">📖 Create My Story!</button>
+    </div>
+    
+    <div class="loading" id="loading" style="display: none;">
+      <div class="loading-spinner"></div>
+      <p>Creating a magical story...</p>
+    </div>
+    
+    <div class="storybook" id="storybook"></div>
+  </div>
+  
+  <script>
+    const topics = [];
+    const topicsContainer = document.getElementById('topics-container');
+    const topicInput = document.getElementById('topicInput');
+    const addTopicBtn = document.getElementById('addTopicBtn');
+    const generateBtn = document.getElementById('generateBtn');
+    const formSection = document.getElementById('form-section');
+    const loading = document.getElementById('loading');
+    const storybook = document.getElementById('storybook');
+    
+    function renderTopics() {
+      topicsContainer.innerHTML = topics.map((topic, i) => `
+        <span class="topic-tag">
+          ${topic}
+          <button onclick="removeTopic(${i})">×</button>
+        </span>
+      `).join('');
+    }
+    
+    window.removeTopic = function(index) {
+      topics.splice(index, 1);
+      renderTopics();
+    };
+    
+    function addTopic() {
+      const topic = topicInput.value.trim();
+      if (topic && !topics.includes(topic)) {
+        topics.push(topic);
+        renderTopics();
+        topicInput.value = '';
+      }
+    }
+    
+    addTopicBtn.addEventListener('click', addTopic);
+    topicInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addTopic();
+    });
+    
+    // Image keywords for different topics
+    function getImageKeywords(pageContent, topics) {
+      const keywords = ['children', 'illustration', 'colorful', 'cartoon'];
+      topics.forEach(t => keywords.push(t.toLowerCase()));
+      return keywords.join(',');
+    }
+    
+    async function generateStory() {
+      const name = document.getElementById('childName').value.trim();
+      const age = document.getElementById('childAge').value;
+      
+      if (!name) {
+        alert('Please enter the child\'s name!');
+        return;
+      }
+      
+      if (topics.length === 0) {
+        alert('Please add at least one topic!');
+        return;
+      }
+      
+      formSection.style.display = 'none';
+      loading.style.display = 'block';
+      storybook.classList.remove('visible');
+      
+      try {
+        const response = await fetch('/api/generate-story', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, age: parseInt(age) || 5, topics })
+        });
+        
+        if (!response.ok) throw new Error('Failed to generate story');
+        
+        const data = await response.json();
+        displayStory(data, name, topics);
+      } catch (error) {
+        console.error(error);
+        alert('Oops! Something went wrong. Please try again.');
+        formSection.style.display = 'block';
+      } finally {
+        loading.style.display = 'none';
+      }
+    }
+    
+    function displayStory(data, name, topics) {
+      const { title, pages } = data;
+      
+      // Generate image URLs based on topics
+      const imageKeywords = topics.map(t => t.toLowerCase().replace(/\s+/g, '-')).join(',');
+      
+      let html = `
+        <div class="book-cover">
+          <h2>${title}</h2>
+          <p>A story about ${name}</p>
+        </div>
+      `;
+      
+      pages.forEach((page, i) => {
+        // Use picsum with seed based on page content for consistent images
+        const seed = page.text.split(' ').slice(0, 3).join('-');
+        const imageUrl = `https://picsum.photos/seed/${encodeURIComponent(seed)}/800/400`;
+        
+        html += `
+          <div class="story-page">
+            <img class="page-image" src="${imageUrl}" alt="Story illustration" loading="lazy" />
+            <p class="page-text">${page.text}</p>
+            <div class="page-number">~ ${i + 1} ~</div>
+          </div>
+        `;
+      });
+      
+      html += `<button class="new-story-btn" onclick="location.reload()">✨ Create Another Story</button>`;
+      
+      storybook.innerHTML = html;
+      storybook.classList.add('visible');
+    }
+    
+    generateBtn.addEventListener('click', generateStory);
+  </script>
+</body>
+</html>

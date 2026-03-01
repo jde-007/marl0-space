@@ -7,7 +7,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
   
   // Allow login page, auth API, and public pages
-  if (pathname === '/login' || pathname === '/api/auth' || pathname === '/fart') {
+  if (pathname === '/login' || pathname === '/api/auth' || pathname === '/fart' || pathname === '/storybook' || pathname === '/api/generate-story') {
     return next();
   }
   
