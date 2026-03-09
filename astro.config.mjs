@@ -10,4 +10,9 @@ export default defineConfig({
   }),
   server: { port: 8888 },
   integrations: [mdx()],
+  vite: {
+    server: {
+      allowedHosts: ['dev.marl0.space', 'localhost'],
+    },
+  },
 });

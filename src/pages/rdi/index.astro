@@ -1,0 +1,274 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title="RDI Discovery Dashboard">
+  <main class="container">
+    <h1>🔍 RDI Discovery Dashboard</h1>
+    <p class="subtitle">Real-time intelligence pipeline status</p>
+    
+    <div class="refresh-info">
+      Last updated: <span id="lastUpdate">Loading...</span>
+      <button id="refreshBtn" onclick="loadStats()">↻ Refresh</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>📊 Queue Status</h3>
+        <div id="queueStats">Loading...</div>
+      </div>
+      
+      <div class="stat-card">
+        <h3>🏠 Places Discovered</h3>
+        <div id="placeStats">Loading...</div>
+      </div>
+      
+      <div class="stat-card">
+        <h3>🔎 Search Progress</h3>
+        <div id="searchStats">Loading...</div>
+      </div>
+      
+      <div class="stat-card">
+        <h3>📁 By Category (Today)</h3>
+        <div id="categoryStats">Loading...</div>
+      </div>
+    </div>
+
+    <h2>🆕 Recent Discoveries (Last Hour)</h2>
+    <div id="recentList" class="recent-list">Loading...</div>
+  </main>
+</Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  
+  h1 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .subtitle {
+    color: #666;
+    margin-bottom: 2rem;
+  }
+  
+  .refresh-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f5f5f5;
+    border-radius: 8px;
+  }
+  
+  #refreshBtn {
+    padding: 0.5rem 1rem;
+    background: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  #refreshBtn:hover {
+    background: #0055aa;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .stat-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .stat-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .big-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #0066cc;
+  }
+  
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .stat-row:last-child {
+    border-bottom: none;
+  }
+  
+  .recent-list {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .place-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .place-item:last-child {
+    border-bottom: none;
+  }
+  
+  .place-item:hover {
+    background: #f9f9f9;
+  }
+  
+  .place-name {
+    font-weight: 500;
+  }
+  
+  .place-type {
+    color: #666;
+    font-size: 0.875rem;
+  }
+  
+  .place-category {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  .category-VENDOR {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+  
+  .category-EXPERIENCE {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .category-HOST {
+    background: #fff3e0;
+    color: #ef6c00;
+  }
+  
+  .category-UNKNOWN {
+    background: #f5f5f5;
+    color: #666;
+  }
+  
+  .eta {
+    color: #666;
+    font-size: 0.875rem;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4caf50, #8bc34a);
+    transition: width 0.3s ease;
+  }
+</style>
+
+<script is:inline>
+async function loadStats() {
+  try {
+    const res = await fetch('/api/rdi-stats');
+    const data = await res.json();
+    
+    if (data.error) {
+      document.getElementById('queueStats').innerHTML = `<span style="color:red">Error: ${data.error}</span>`;
+      return;
+    }
+    
+    // Update timestamp
+    document.getElementById('lastUpdate').textContent = new Date(data.timestamp).toLocaleString();
+    
+    // Queue stats
+    const queue = data.queue;
+    document.getElementById('queueStats').innerHTML = `
+      <div class="stat-row"><span>Pending</span><strong>${(queue.PENDING || 0).toLocaleString()}</strong></div>
+      <div class="stat-row"><span>In Progress</span><strong>${queue.IN_PROGRESS || 0}</strong></div>
+      <div class="stat-row"><span>Completed</span><strong>${(queue.COMPLETED || 0).toLocaleString()}</strong></div>
+      <div class="stat-row"><span>Failed</span><strong>${queue.FAILED || 0}</strong></div>
+    `;
+    
+    // Place stats
+    document.getElementById('placeStats').innerHTML = `
+      <div class="big-number">${data.places.total.toLocaleString()}</div>
+      <div class="stat-row"><span>Today</span><strong>+${data.places.today.toLocaleString()}</strong></div>
+      <div class="stat-row"><span>Last hour</span><strong>+${data.places.lastHour.toLocaleString()}</strong></div>
+    `;
+    
+    // Search stats
+    const eta = data.searches.etaMinutes;
+    const etaText = eta ? `${Math.floor(eta / 60)}h ${eta % 60}m` : 'N/A';
+    document.getElementById('searchStats').innerHTML = `
+      <div class="stat-row"><span>Pending searches</span><strong>${data.searches.pending.toLocaleString()}</strong></div>
+      <div class="stat-row"><span>Rate</span><strong>${data.searches.ratePerMin}/min</strong></div>
+      <div class="stat-row"><span>ETA</span><strong class="eta">${etaText}</strong></div>
+    `;
+    
+    // Category stats
+    const catHtml = data.byCategory.map(c => 
+      `<div class="stat-row"><span>${c.placeCategory || 'UNKNOWN'}</span><strong>${c.count}</strong></div>`
+    ).join('');
+    document.getElementById('categoryStats').innerHTML = catHtml || '<em>No data today</em>';
+    
+    // Recent places
+    if (data.recentPlaces.length === 0) {
+      document.getElementById('recentList').innerHTML = '<div style="padding:2rem;text-align:center;color:#666">No places found in the last hour</div>';
+    } else {
+      const listHtml = data.recentPlaces.map(p => `
+        <div class="place-item">
+          <div>
+            <div class="place-name">${p.name}</div>
+            <div class="place-type">${p.primaryType || 'unknown'}</div>
+          </div>
+          <span class="place-category category-${p.placeCategory || 'UNKNOWN'}">${p.placeCategory || 'UNKNOWN'}</span>
+        </div>
+      `).join('');
+      document.getElementById('recentList').innerHTML = listHtml;
+    }
+    
+  } catch (err) {
+    console.error('Failed to load stats:', err);
+    document.getElementById('queueStats').innerHTML = `<span style="color:red">Failed to connect</span>`;
+  }
+}
+
+// Load on page load
+loadStats();
+
+// Auto-refresh every 30 seconds
+setInterval(loadStats, 30000);
+</script>
+</Base>

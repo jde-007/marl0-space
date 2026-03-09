@@ -11,6 +11,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
   
+  // Allow RDI dashboard (public)
+  if (pathname.startsWith('/rdi') || pathname === '/api/rdi-stats') {
+    return next();
+  }
+  
   // Allow static assets
   if (pathname.startsWith('/_astro/') || pathname.match(/\.(css|js|png|jpg|svg|ico|woff|woff2|yaml|txt)$/)) {
     return next();
