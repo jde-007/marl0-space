@@ -64,10 +64,35 @@ const incidents = defineCollection({
   }),
 });
 
+const experiences = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/experiences' }),
+  schema: z.object({
+    title: z.string(),
+    org: z.string(),
+    role: z.string(),
+    period: z.string(),
+    tags: z.array(z.string()).optional(),
+    capabilities: z.array(z.string()).optional(),
+    order: z.number().optional(),
+  }),
+});
+
+const learnings = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/learnings' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    source: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+  }),
+});
+
 export const collections = {
   projects,
   blog,
   capabilities,
   reports,
   incidents,
+  experiences,
+  learnings,
 };
